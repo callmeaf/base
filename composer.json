@@ -1,0 +1,29 @@
+{
+    "name": "callmeaf/base",
+    "description": "Base of each package you want use from callmeaf",
+    "type": "metapackage",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Callmeaf\\Base\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "alikhoshkar",
+            "email": "alikhoshkar2000@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Callmeaf\\Base\\AfBaseSerivceProvider"
+            ]
+        }
+    }
+}
