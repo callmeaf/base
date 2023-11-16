@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'unknown_message' => 'Something went wrong. please try again later',
+    'unknown_error' => 'Something went wrong. please try again later',
 ];
