@@ -18,12 +18,6 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Callmeaf\\Base\\AfBaseServiceProvider"
-            ]
-        }
-    }
+    "require": {}
+
 }

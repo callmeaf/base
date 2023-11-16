@@ -4,7 +4,7 @@ namespace Callmeaf\Base;
 
 use Illuminate\Support\ServiceProvider;
 
-class AfBaseServiceProvider extends ServiceProvider
+class CallmeafBaseServiceProvider extends ServiceProvider
 {
     public function boot()
     {
