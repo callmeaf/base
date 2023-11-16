@@ -22,7 +22,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Callmeaf\\Base\\CallmeafBaseSerivceProvider"
+                "Callmeaf\\Base\\CallmeafBaseServiceProvider"
             ]
         }
     }
