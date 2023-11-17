@@ -16,22 +16,22 @@ class CallmeafBaseServiceProvider extends ServiceProvider
 
     private function registerConfig(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/config/callmeaf-base.php','callmeaf-base');
+        $this->mergeConfigFrom(__DIR__ . '/../config/callmeaf-base.php','callmeaf-base');
         $this->publishes([
-            __DIR__.'/config/callmeaf-base.php' => config_path('callmeaf-base.php'),
+            __DIR__ . '/../config/callmeaf-base.php' => config_path('callmeaf-base.php'),
         ],'callmeaf-base-config');
     }
 
     private function registerLang(): void
     {
-        $langPathFromResource = lang_path('callmeaf');
+        $langPathFromResource = lang_path('vendor/callmeaf');
         if(is_dir($langPathFromResource)) {
             $this->loadTranslationsFrom($langPathFromResource,'callmeaf');
         } else {
-            $this->loadTranslationsFrom(__DIR__.'/lang','callmeaf');
+            $this->loadTranslationsFrom(__DIR__ . '/../lang','callmeaf');
         }
         $this->publishes([
-            __DIR__.'/lang/base-v1.php' => lang_path('callmeaf/base-v1.php'),
+            __DIR__ . '/../lang/base-v1.php' => lang_path('vendor/callmeaf/base-v1.php'),
         ],'callmeaf-base-lang');
     }
 }
