@@ -31,7 +31,7 @@ class CallmeafBaseServiceProvider extends ServiceProvider
             $this->loadTranslationsFrom(__DIR__ . '/../lang','callmeaf');
         }
         $this->publishes([
-            __DIR__ . '/../lang/base-v1.php' => lang_path('vendor/callmeaf/base-v1.php'),
+            __DIR__ . '/../lang' => lang_path('vendor/callmeaf'),
         ],'callmeaf-base-lang');
     }
 }
