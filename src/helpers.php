@@ -5,24 +5,27 @@ use Illuminate\Http\JsonResponse;
 if(!function_exists('apiResponse')) {
     /**
      * all api response structure
-     * @param array $data
-     * @param string $message
-     * @param int $status
+     * @param array|null $data
+     * @param string|null $message
+     * @param int|null $status
      * @return JsonResponse
      */
-    function apiResponse(array $data,string $message = '',int $status = \Symfony\Component\HttpFoundation\Response::HTTP_OK): JsonResponse
+    function apiResponse(null|array $data,?string $message = '',?int $status = null): JsonResponse
     {
-        if($message instanceof Exception) {
-            if(app()->isProduction()) {
-                $message = __('callmeaf::base.v1.unknown_error');
-            } else {
-                $message = $message->getMessage();
-            }
+        $status = $status ?? \Symfony\Component\HttpFoundation\Response::HTTP_OK;
+        if(app()->isProduction() && $status >= 500) {
+            $message = __('callmeaf::base-v1.unknown_error');
         }
-        return response()->json([
-            'data' => $data,
-            'message' => $message,
-        ],$status);
+
+        $transformedData = [];
+        if($errors = @$data['errors']) {
+            $transformedData['errors'] = $errors;
+        } else {
+            $transformedData['data'] = $data;
+        }
+        $transformedData['message'] = $message ?? '';
+
+        return response()->json($transformedData,$status);
     }
 }
 

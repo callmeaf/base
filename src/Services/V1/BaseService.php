@@ -6,6 +6,7 @@ use Callmeaf\Base\Services\V1\Contracts\BaseServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class BaseService implements BaseServiceInterface
 {
@@ -52,6 +53,7 @@ class BaseService implements BaseServiceInterface
         $this->model = $this->query->create(
             $this->mergeData($data)
         );
+
         return $this;
     }
 
