@@ -2,6 +2,7 @@
 
 namespace Callmeaf\Base;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class CallmeafBaseServiceProvider extends ServiceProvider
@@ -25,12 +26,12 @@ class CallmeafBaseServiceProvider extends ServiceProvider
     {
         $langPathFromResource = lang_path('callmeaf');
         if(is_dir($langPathFromResource)) {
-            $this->loadTranslationsFrom($langPathFromResource,'callmeaf::base.v1');
+            $this->loadTranslationsFrom($langPathFromResource,'callmeaf');
         } else {
-            $this->loadTranslationsFrom(__DIR__.'/lang/callmeaf-base-v1.php','callmeaf::base.v1');
+            $this->loadTranslationsFrom(__DIR__.'/lang','callmeaf');
         }
         $this->publishes([
-            __DIR__.'/lang/callmeaf-base-v1.php' => lang_path('callmeaf/base-v1.php'),
+            __DIR__.'/lang/base-v1.php' => lang_path('callmeaf/base-v1.php'),
         ],'callmeaf-base-lang');
     }
 }
