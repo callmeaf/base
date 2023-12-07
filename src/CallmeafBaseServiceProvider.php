@@ -7,31 +7,35 @@ use Illuminate\Support\ServiceProvider;
 
 class CallmeafBaseServiceProvider extends ServiceProvider
 {
+    private const CONFIGS_DIR = __DIR__ . '/../config';
+    private const LANG_DIR = __DIR__ . '/../lang';
+    private const LANG_NAMESPACE = 'callmeaf_base';
+
     public function boot()
     {
-        require __DIR__ . '/helpers.php';
+        require_once( __DIR__ . '/helpers.php');
         $this->registerConfig();
         $this->registerLang();
     }
 
     private function registerConfig(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/callmeaf-base.php','callmeaf-base');
+        $this->mergeConfigFrom(self::CONFIGS_DIR . '/callmeaf-base.php','callmeaf-base');
         $this->publishes([
-            __DIR__ . '/../config/callmeaf-base.php' => config_path('callmeaf-base.php'),
+            self::CONFIGS_DIR . '/callmeaf-base.php' => config_path('callmeaf-base.php'),
         ],'callmeaf-base-config');
     }
 
     private function registerLang(): void
     {
-        $langPathFromResource = lang_path('vendor/callmeaf');
-        if(is_dir($langPathFromResource)) {
-            $this->loadTranslationsFrom($langPathFromResource,'callmeaf');
+        $langPathFromVendor = lang_path('vendor/callmeaf/base');
+        if(is_dir($langPathFromVendor)) {
+            $this->loadTranslationsFrom($langPathFromVendor,self::LANG_NAMESPACE);
         } else {
-            $this->loadTranslationsFrom(__DIR__ . '/../lang','callmeaf');
+            $this->loadTranslationsFrom(self::LANG_DIR,self::LANG_NAMESPACE);
         }
         $this->publishes([
-            __DIR__ . '/../lang' => lang_path('vendor/callmeaf'),
+            self::LANG_DIR => $langPathFromVendor,
         ],'callmeaf-base-lang');
     }
 }
