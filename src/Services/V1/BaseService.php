@@ -6,11 +6,29 @@ use Callmeaf\Base\Services\V1\Contracts\BaseServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 
 class BaseService implements BaseServiceInterface
 {
-    public function __construct(protected ?Builder $query = null,protected ?Model $model = null,protected ?Collection $collection = null,protected array $defaultData = [])
+    /**
+     * @param Builder|null $query
+     * @param Model|null $model
+     * @param Collection|null $collection
+     * @param string|null $resource instance of JsonResource
+     * @param string|null $resourceCollection instance of ResourceCollection
+     * @param array $defaultData
+     */
+    public function __construct(
+        protected ?Builder    $query = null,
+        protected ?Model      $model = null,
+        protected ?Collection $collection = null,
+        protected ?string     $resource = null,
+        protected ?string     $resourceCollection = null,
+        protected array       $defaultData = [],
+    )
     {
 
     }
@@ -26,9 +44,13 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function getModel(): Model
+    public function getModel(bool $asResource = false): Model|JsonResource
     {
-        return $this->model;
+        $model = $this->model;
+        if ($asResource) {
+            $model = new $this->resource($model);
+        }
+        return $model;
     }
 
     public function setModel(Model $model): BaseService
@@ -37,9 +59,13 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function getCollection(): Collection
+    public function getCollection(bool $asResourceCollection = false): Collection|LengthAwarePaginator|ResourceCollection
     {
-        return $this->collection;
+        $collection = $this->collection;
+        if ($asResourceCollection) {
+            $collection = new $this->resourceCollection($collection);
+        }
+        return $collection;
     }
 
     public function setCollection(Collection $collection): BaseService
