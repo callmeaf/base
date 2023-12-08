@@ -14,9 +14,6 @@ trait HasType
     }
     public function typeText(): Attribute
     {
-        Log::alert($this->type->value);
-        Log::alert($this->type->name);
-        Log::alert(json_encode($this::enumsLang()));
         return Attribute::make(
             get: fn() => enumTranslator($this->type,$this::enumsLang()),
         );
