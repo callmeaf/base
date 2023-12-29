@@ -8,8 +8,11 @@ use Illuminate\Support\ServiceProvider;
 class CallmeafBaseServiceProvider extends ServiceProvider
 {
     private const CONFIGS_DIR = __DIR__ . '/../config';
+    private const CONFIGS_KEY = 'callmeaf-base';
+    private const CONFIGS_GROUP = 'callmeaf-base-config';
     private const LANG_DIR = __DIR__ . '/../lang';
     private const LANG_NAMESPACE = 'callmeaf_base';
+    private const LANG_GROUP = 'callmeaf-base-lang';
 
     public function boot()
     {
@@ -20,10 +23,10 @@ class CallmeafBaseServiceProvider extends ServiceProvider
 
     private function registerConfig(): void
     {
-        $this->mergeConfigFrom(self::CONFIGS_DIR . '/callmeaf-base.php','callmeaf-base');
+        $this->mergeConfigFrom(self::CONFIGS_DIR . '/callmeaf-base.php',self::CONFIGS_KEY);
         $this->publishes([
             self::CONFIGS_DIR . '/callmeaf-base.php' => config_path('callmeaf-base.php'),
-        ],'callmeaf-base-config');
+        ],self::CONFIGS_GROUP);
     }
 
     private function registerLang(): void
@@ -36,6 +39,6 @@ class CallmeafBaseServiceProvider extends ServiceProvider
         }
         $this->publishes([
             self::LANG_DIR => $langPathFromVendor,
-        ],'callmeaf-base-lang');
+        ],self::LANG_GROUP);
     }
 }
