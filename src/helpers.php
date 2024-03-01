@@ -10,11 +10,14 @@ if(!function_exists('apiResponse')) {
      * @param int|null $status
      * @return JsonResponse
      */
-    function apiResponse(null|array $data,?string $message = '',?int $status = null): JsonResponse
+    function apiResponse(null|array $data,null|Exception|string $message = '',?int $status = null): JsonResponse
     {
         $status = $status ?? \Symfony\Component\HttpFoundation\Response::HTTP_OK;
+        if($message instanceof Exception) {
+            $message = $message->getMessage();
+        }
         if(app()->isProduction() && $status >= 500) {
-            $message = __('callmeaf::base-v1.unknown_error');
+            $message = __('callmeaf-base::v1.unknown_error');
         }
 
         $transformedData = [];

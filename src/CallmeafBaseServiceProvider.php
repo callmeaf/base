@@ -11,7 +11,7 @@ class CallmeafBaseServiceProvider extends ServiceProvider
     private const CONFIGS_KEY = 'callmeaf-base';
     private const CONFIGS_GROUP = 'callmeaf-base-config';
     private const LANG_DIR = __DIR__ . '/../lang';
-    private const LANG_NAMESPACE = 'callmeaf_base';
+    private const LANG_NAMESPACE = 'callmeaf-base';
     private const LANG_GROUP = 'callmeaf-base-lang';
 
     public function boot()
