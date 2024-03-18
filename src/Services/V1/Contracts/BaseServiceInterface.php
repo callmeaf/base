@@ -15,7 +15,7 @@ interface BaseServiceInterface
     public function getQuery(): Builder;
     public function setQuery(Builder $query): BaseService;
 
-    public function getModel(bool $asResource = false): Model|JsonResource;
+    public function getModel(bool $asResource = false,array $attributes = []): Model|JsonResource;
     public function setModel(Model $model): BaseService;
 
     public function getCollection(bool $asResourceCollection = false): Collection|LengthAwarePaginator|ResourceCollection;

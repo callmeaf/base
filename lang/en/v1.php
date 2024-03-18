@@ -2,5 +2,7 @@
 
 return [
     'successful_created' => 'Successfully created. ( :title )',
+    'successful_loaded' => 'Successfully loaded.',
+    'successful_logged_in' => 'Successfully logged in.',
     'unknown_error' => 'Something went wrong. please try again later',
 ];

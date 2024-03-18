@@ -3,6 +3,7 @@
 namespace Callmeaf\Base\Services\V1;
 
 use Callmeaf\Base\Services\V1\Contracts\BaseServiceInterface;
+use Callmeaf\User\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -44,11 +45,13 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function getModel(bool $asResource = false): Model|JsonResource
+    public function getModel(bool $asResource = false,array $attributes = []): Model|JsonResource
     {
         $model = $this->model;
         if ($asResource) {
-            $model = new $this->resource($model);
+            $model = new $this->resource($model,only: $attributes);
+        } else {
+            $model = $model->only($attributes);
         }
         return $model;
     }

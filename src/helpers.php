@@ -109,3 +109,21 @@ if(!function_exists('enumTranslator')) {
         return stringReplacer($source[$enumCase->name] ?? $defaultValue, $replace);
     }
 }
+
+if(!function_exists('toArrayResource'))
+{
+    /**
+     * Improve performance of api resource by set each item as function and only call them if needed
+     * @param array $data
+     * @param array|int $only
+     * @return array
+     */
+    function toArrayResource(array $data,array|int $only = []): array
+    {
+        $data = collect($data);
+        if(@$only[0] !== '*' && !is_int($only)) {
+            $data = $data->only($only);
+        }
+        return $data->map(fn($item) => $item())->toArray();
+    }
+}
