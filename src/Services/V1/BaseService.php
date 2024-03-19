@@ -45,6 +45,12 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
+    public function freshQuery(): BaseService
+    {
+        $this->query = $this->getModelFromQuery()::query();
+        return $this;
+    }
+
     public function getModel(bool $asResource = false,array $attributes = []): Model|JsonResource
     {
         $model = $this->model;
@@ -54,6 +60,11 @@ class BaseService implements BaseServiceInterface
             $model = $model->only($attributes);
         }
         return $model;
+    }
+
+    public function getModelFromQuery(): Builder|Model
+    {
+        return $this->query->getModel();
     }
 
     public function setModel(Model $model): BaseService
@@ -74,6 +85,27 @@ class BaseService implements BaseServiceInterface
     public function setCollection(Collection $collection): BaseService
     {
         $this->collection = $collection;
+        return $this;
+    }
+
+    public function where(callable|string $column, array|string $valueOrOperation, array|string|null $value = null): BaseService
+    {
+        if(is_callable($column)) {
+            $this->query->where($column);
+        } else {
+            if(is_array($valueOrOperation)) {
+                $this->query->whereIn($column,$valueOrOperation);
+            } else {
+                $this->query->where($column,$valueOrOperation,$value);
+            }
+        }
+
+        return $this;
+    }
+
+    public function first(): BaseService
+    {
+        $this->model = $this->query->first();
         return $this;
     }
 
