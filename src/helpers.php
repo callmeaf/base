@@ -127,3 +127,27 @@ if(!function_exists('toArrayResource'))
         return $data->map(fn($item) => $item())->toArray();
     }
 }
+
+if(!function_exists('setArrayKeys')) {
+    function setArrayKeys(array $keys,array $values): array
+    {
+        $data = [];
+        foreach ($keys as $index => $key) {
+            $data[$key] = $values[$index];
+        }
+        return $data;
+    }
+}
+
+if(!function_exists('randomDigits')) {
+    function randomDigits(int $length): string
+    {
+        $result = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $result .= random_int(0, 9);
+        }
+
+        return $result;
+    }
+}

@@ -51,13 +51,14 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function getModel(bool $asResource = false,array $attributes = []): Model|JsonResource
+    public function getModel(bool $asResource = false,array $attributes = []): Model|JsonResource|null
     {
         $model = $this->model;
+        if(is_null($model)) {
+            return $model;
+        }
         if ($asResource) {
             $model = new $this->resource($model,only: $attributes);
-        } else {
-            $model = $model->only($attributes);
         }
         return $model;
     }
@@ -88,19 +89,28 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function where(callable|string $column, array|string $valueOrOperation, array|string|null $value = null): BaseService
+    public function where(callable|string|array $column, array|string|null $valueOrOperation = null, array|string|null $value = null): BaseService
     {
-        if(is_callable($column)) {
-            $this->query->where($column);
-        } else {
-            if(is_array($valueOrOperation)) {
+        switch (true) {
+            case is_callable($column) || is_array($column): {
+                $this->query->where($column);
+                break;
+            }
+            case is_array($valueOrOperation) && is_string($column): {
                 $this->query->whereIn($column,$valueOrOperation);
-            } else {
+                break;
+            }
+            default: {
                 $this->query->where($column,$valueOrOperation,$value);
             }
         }
 
         return $this;
+    }
+
+    public function exists(): bool
+    {
+        return $this->query->exists();
     }
 
     public function first(): BaseService
@@ -117,6 +127,24 @@ class BaseService implements BaseServiceInterface
 
         return $this;
     }
+
+    public function update(array $data): BaseService
+    {
+        $this->model->update($data);
+        $this->model = $this->model->refresh();
+        return $this;
+    }
+
+    public function updateOrCreate(array $identifies, array $data): BaseService
+   {
+       $model = $this->freshQuery()->where($identifies)->first()->getModel();
+       if($model) {
+           $this->update($data);
+       } else {
+           $this->create($this->mergeData($data));
+       }
+        return $this;
+   }
 
     public function mergeData(array $data): array
     {
