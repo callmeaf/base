@@ -26,5 +26,7 @@ interface BaseServiceInterface
     public function create(array $data): BaseService;
     public function update(array $data): BaseService;
     public function updateOrCreate(array $identifies,array $data): BaseService;
+    public function delete(): BaseService;
+    public function forceDelete(int|string|null $id = null,string $column = 'id'): BaseService;
     public function mergeData(array $data): array;
 }

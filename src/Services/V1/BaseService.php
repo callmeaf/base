@@ -146,6 +146,21 @@ class BaseService implements BaseServiceInterface
         return $this;
    }
 
+   public function delete(): BaseService
+   {
+       $this->model->delete();
+       return $this;
+   }
+
+   public function forceDelete(int|string|null $id = null,string $column = 'id'): BaseService
+   {
+       if(!$this->model) {
+           $this->freshQuery()->where($column,$id)->first();
+       }
+        $this->model->forceDelete();
+        return $this;
+   }
+
     public function mergeData(array $data): array
     {
         return array_merge($this->defaultData,$data);
