@@ -5,15 +5,16 @@ use Illuminate\Http\JsonResponse;
 if(!function_exists('apiResponse')) {
     /**
      * all api response structure
-     * @param array|null $data
-     * @param string|null $message
+     * @param array $data
+     * @param Exception|string|null $message
      * @param int|null $status
      * @return JsonResponse
      */
-    function apiResponse(null|array $data,null|Exception|string $message = '',?int $status = null): JsonResponse
+    function apiResponse(array $data = [],null|Exception|string $message = '',?int $status = null): JsonResponse
     {
         $status = $status ?? \Symfony\Component\HttpFoundation\Response::HTTP_OK;
         if($message instanceof Exception) {
+            $status = $message->getCode();
             $message = $message->getMessage();
         }
         if(app()->isProduction() && $status >= 500) {
@@ -149,5 +150,14 @@ if(!function_exists('randomDigits')) {
         }
 
         return $result;
+    }
+}
+
+if(!function_exists('isApiRequest'))
+{
+    function isApiRequest(?\Illuminate\Http\Request $request = null): bool
+    {
+        $request = $request ?? request();
+        return $request->is(config('callmeaf-base.prefix_api') . '/*');
     }
 }

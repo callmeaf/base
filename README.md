@@ -1,1 +1,4 @@
 - change timezone to Asia/Tehran
+- Authenticate Middleware
+- Handler Exception
+- RedirectIfAuthenticated Middleware
