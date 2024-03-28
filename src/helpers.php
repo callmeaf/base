@@ -29,7 +29,7 @@ if(!function_exists('apiResponse')) {
         }
         $transformedData['message'] = $message ?? '';
 
-        return response()->json($transformedData,$status);
+        return response()->json($transformedData,$status ?: \Symfony\Component\HttpFoundation\Response::HTTP_EXPECTATION_FAILED);
     }
 }
 
@@ -158,6 +158,6 @@ if(!function_exists('isApiRequest'))
     function isApiRequest(?\Illuminate\Http\Request $request = null): bool
     {
         $request = $request ?? request();
-        return $request->is(config('callmeaf-base.prefix_api') . '/*');
+        return $request->is(config('callmeaf-base.api.prefix_url') . '/*');
     }
 }

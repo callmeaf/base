@@ -18,6 +18,7 @@ interface BaseServiceInterface
     public function getModel(bool $asResource = false,array $attributes = []): Model|JsonResource|null;
     public function getModelFromQuery(): Builder|Model;
     public function setModel(Model $model): BaseService;
+    public function freshModel(): BaseService;
     public function getCollection(bool $asResourceCollection = false): Collection|LengthAwarePaginator|ResourceCollection;
     public function setCollection(Collection $collection): BaseService;
     public function where(string|callable|array $column,string|array|null $valueOrOperation = null,null|string|array $value = null): BaseService;

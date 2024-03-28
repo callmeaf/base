@@ -3,14 +3,12 @@
 namespace Callmeaf\Base\Services\V1;
 
 use Callmeaf\Base\Services\V1\Contracts\BaseServiceInterface;
-use Callmeaf\User\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Log;
 
 class BaseService implements BaseServiceInterface
 {
@@ -71,6 +69,12 @@ class BaseService implements BaseServiceInterface
     public function setModel(Model $model): BaseService
     {
         $this->model = $model;
+        return $this;
+    }
+
+    public function freshModel(): BaseService
+    {
+        $this->model = $this->model->fresh();
         return $this;
     }
 
