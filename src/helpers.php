@@ -123,6 +123,7 @@ if(!function_exists('toArrayResource'))
     {
         $data = collect($data);
         if(@$only[0] !== '*' && !is_int($only)) {
+            $only = collect($only)->reject(fn($value,$key) => str($key)->startsWith('!'));
             $data = $data->only($only);
         }
         return $data->map(fn($item) => $item())->toArray();

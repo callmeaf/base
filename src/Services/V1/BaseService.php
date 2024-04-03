@@ -2,13 +2,19 @@
 
 namespace Callmeaf\Base\Services\V1;
 
+use Callmeaf\Base\Exceptions\MustInstanceOfException;
 use Callmeaf\Base\Services\V1\Contracts\BaseServiceInterface;
+use Callmeaf\Media\Enums\MediaCollection;
+use Callmeaf\Media\Enums\MediaDisk;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
+use Spatie\MediaLibrary\HasMedia;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class BaseService implements BaseServiceInterface
 {
@@ -56,7 +62,7 @@ class BaseService implements BaseServiceInterface
             return $model;
         }
         if ($asResource) {
-            $model = new $this->resource($model,only: $attributes);
+            $model = new $this->resource($model,$attributes);
         }
         return $model;
     }
@@ -162,6 +168,19 @@ class BaseService implements BaseServiceInterface
            $this->freshQuery()->where($column,$id)->first();
        }
         $this->model->forceDelete();
+        return $this;
+   }
+
+   public function createMedia(UploadedFile $file, MediaCollection $collection, MediaDisk $disk,bool $removeOlderMedia = true): BaseService
+   {
+       if(!($this->model instanceof HasMedia)) {
+            throw new MustInstanceOfException(__('callmeaf-base::v1.errors.must_instance_if', ['target' => 'Model', 'source' => ' \Spatie\MediaLibrary\HasMedia']));
+       }
+       if($removeOlderMedia) {
+           $this->model->clearMediaCollection(collectionName: $collection->value);
+       }
+
+       $this->model->addMedia(file: $file)->toMediaCollection(collectionName: $collection->value,diskName: $disk->value);
         return $this;
    }
 

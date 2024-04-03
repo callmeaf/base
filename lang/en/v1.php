@@ -11,6 +11,7 @@ return [
     'successful_verified_email' => 'Successfully verified email.',
     'unknown_error' => 'Something went wrong. please try again later',
     'errors' => [
-        'to_many_attempts' => 'To many attempts,please try again later minutes,DON\'t try again otherwise you will blocked more time.',
+        'to_many_attempts' => 'To many attempts,please try again later minutes,DON\'t try again now otherwise you will be blocked more time.',
+        'must_instance_if' => ':target must instance of :source',
     ],
 ];

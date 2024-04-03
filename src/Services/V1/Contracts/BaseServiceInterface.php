@@ -3,12 +3,15 @@
 namespace Callmeaf\Base\Services\V1\Contracts;
 
 use Callmeaf\Base\Services\V1\BaseService;
+use Callmeaf\Media\Enums\MediaCollection;
+use Callmeaf\Media\Enums\MediaDisk;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface BaseServiceInterface
 {
@@ -29,5 +32,6 @@ interface BaseServiceInterface
     public function updateOrCreate(array $identifies,array $data): BaseService;
     public function delete(): BaseService;
     public function forceDelete(int|string|null $id = null,string $column = 'id'): BaseService;
+    public function createMedia(UploadedFile $file,MediaCollection $collection,MediaDisk $disk,bool $removeOlderMedia = true): BaseService;
     public function mergeData(array $data): array;
 }
