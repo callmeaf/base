@@ -9,6 +9,8 @@ return [
     'successful_logged_out' => 'Successfully logged out.',
     'successful_sent' => 'Successfully sent.',
     'successful_verified_email' => 'Successfully verified email.',
+    'successful_deleted' => 'Successfully deleted. ( :title )',
+    'successful_deleted_non_title' => 'Successfully deleted.',
     'unknown_error' => 'Something went wrong. please try again later',
     'errors' => [
         'to_many_attempts' => 'To many attempts,please try again later minutes,DON\'t try again now otherwise you will be blocked more time.',

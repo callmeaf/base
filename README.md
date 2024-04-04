@@ -4,3 +4,5 @@
 - RedirectIfAuthenticated Middleware
 - Kavenegar apikey
 - Faraz sms apikey
+- Uncomment kernel sanctum middleware (security)
+- Env App url for spatie media
