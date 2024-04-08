@@ -25,6 +25,7 @@ class BaseService implements BaseServiceInterface
      * @param string|null $resource instance of JsonResource
      * @param string|null $resourceCollection instance of ResourceCollection
      * @param array $defaultData
+     * @param array $searchableColumns
      */
     public function __construct(
         protected ?Builder    $query = null,
@@ -33,6 +34,7 @@ class BaseService implements BaseServiceInterface
         protected ?string     $resource = null,
         protected ?string     $resourceCollection = null,
         protected array       $defaultData = [],
+        protected array       $searchableColumns = [],
     )
     {
 
@@ -129,6 +131,11 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
+    public function all(array $relations = [], array $columns = ['*'], array $filters = [], ?int $perPage = null, ?int $page = null): BaseService
+    {
+        // TODO: Implement all() method.
+    }
+
     public function create(array $data): BaseService
     {
         $this->model = $this->query->create(
@@ -187,5 +194,37 @@ class BaseService implements BaseServiceInterface
     public function mergeData(array $data): array
     {
         return array_merge($this->defaultData,$data);
+    }
+
+    protected function search(array $filters = []): BaseService
+    {
+        $filters = collect($filters);
+        $searchableColumns = [
+            ...config('callmeaf-base.searchable_columns'),
+            ...$this->searchableColumns,
+        ];
+        foreach ($searchableColumns as $key => $column) {
+            $value = $filters->get($key);
+            if(is_null($value)) {
+                continue;
+            }
+            if(is_array($column)) {
+                [$columnName,$operation] = $column;
+                $this->query->where($columnName,$operation,$value);
+            } else {
+                $this->query->where($column,$value);
+            }
+        }
+
+        $filters = $filters->filter(fn($item) => strlen(trim($item)))->values(); // remove null values
+        $this->query->where(function ($query) use ($searchableColumns,$filters) {
+            foreach ($searchableColumns as $key => $column) {
+                $value = $filters->get($key);
+                $query->orWhere($key,'like',"%$value%");
+            }
+        });
+
+
+        return $this;
     }
 }

@@ -27,6 +27,7 @@ interface BaseServiceInterface
     public function where(string|callable|array $column,string|array|null $valueOrOperation = null,null|string|array $value = null): BaseService;
     public function exists(): bool;
     public function first(): BaseService;
+    public function all(array $relations = [],array $columns = ['*'],array $filters = [],?int $perPage = null,?int $page = null): BaseService;
     public function create(array $data): BaseService;
     public function update(array $data): BaseService;
     public function updateOrCreate(array $identifies,array $data): BaseService;
