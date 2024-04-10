@@ -36,27 +36,23 @@ if(!function_exists('apiResponse')) {
 if(!function_exists('validationManager')) {
     /**
      * merge config validation with default validation
-     * @param string $key
-     * @param array $values
-     * @param mixed $source
+     * @param array $rules
+     * @param array $filters
      * @return array
      */
-    function validationManager(string $key,array $values,mixed $source): array
+    function validationManager(array $rules,array $filters): array
     {
-        $validationKey = $source[$key] ?? null;
-        if(is_array($validationKey)) {
-            return $validationKey;
-        }
-        if($validationKey) {
-            return [
-                'required',
-                ...$values,
-            ];
-        }
-        return [
-            'nullable',
-            ...$values,
-        ];
+        $rules = collect($rules)->intersectByKeys($filters);
+       foreach ($filters as $key => $values) {
+           match (true) {
+              is_array($values) => $rules[$key] = $values,
+              $values === true => $rules[$key] = ['required',...$rules[$key]],
+              $values === false => $rules[$key] = ['nullable',...$rules[$key]],
+              default => $rules[$key],
+           };
+       }
+
+       return $rules->toArray();
     }
 }
 
@@ -160,5 +156,12 @@ if(!function_exists('isApiRequest'))
     {
         $request = $request ?? request();
         return $request->is(config('callmeaf-base.api.prefix_url') . '/*');
+    }
+}
+
+if(!function_exists('searcherLikeValue')) {
+    function searcherLikeValue(string|int|array $value): string
+    {
+        return config('callmeaf-base.searcher_like_symbol') === '%' ? "$value%" : "%$value%";
     }
 }

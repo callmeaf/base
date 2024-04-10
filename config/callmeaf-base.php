@@ -15,32 +15,21 @@ return [
             'web'
         ],
     ],
-    'searchable_columns' => [
-        'status' => 'status',
-        'type' => 'type',
-        'created_from' => [
-            'created_at',
-            '>',
-        ],
-        'created_to' => [
-            'created_at',
-            '<',
-        ],
-        'updated_from' => [
-            'updated_at',
-            '>',
-        ],
-        'updated_to' => [
-            'updated_at',
-            '<',
-        ],
-        'deleted_from' => [
-            'deleted_at',
-            '>',
-        ],
-        'deleted_to' => [
-            'deleted_at',
-            '<',
-        ],
+    'searcher' => \Callmeaf\Base\Utilities\V1\Searcher::class,
+    'searcher_like_symbol' => '%', // %%
+    'default_searcher_validation' => [
+        'status' => [],
+        'type' => [],
+        'created_from' => [],
+        'created_to' => [],
+        'updated_from' => [],
+        'updated_to' => [],
+        'deleted_from' => [],
+        'deleted_to' => [],
     ],
+    'always_paginated' => true,
+    'default_page' => 1,
+    'default_per_page' => 15,
+    'page_key' => 'page',
+    'per_page_key' => 'per_page',
 ];

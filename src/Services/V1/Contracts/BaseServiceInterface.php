@@ -22,8 +22,8 @@ interface BaseServiceInterface
     public function getModelFromQuery(): Builder|Model;
     public function setModel(Model $model): BaseService;
     public function freshModel(): BaseService;
-    public function getCollection(bool $asResourceCollection = false): Collection|LengthAwarePaginator|ResourceCollection;
-    public function setCollection(Collection $collection): BaseService;
+    public function getCollection(bool $asResourceCollection = false,bool $asResponseData = false,array $attributes = []): Collection|LengthAwarePaginator|ResourceCollection|array|null;
+    public function setCollection(Collection|LengthAwarePaginator|ResourceCollection $collection): BaseService;
     public function where(string|callable|array $column,string|array|null $valueOrOperation = null,null|string|array $value = null): BaseService;
     public function exists(): bool;
     public function first(): BaseService;

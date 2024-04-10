@@ -4,6 +4,7 @@ namespace Callmeaf\Base\Services\V1;
 
 use Callmeaf\Base\Exceptions\MustInstanceOfException;
 use Callmeaf\Base\Services\V1\Contracts\BaseServiceInterface;
+use Callmeaf\Base\Utilities\V1\Contracts\SearcherInterface;
 use Callmeaf\Media\Enums\MediaCollection;
 use Callmeaf\Media\Enums\MediaDisk;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,7 +13,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\HasMedia;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -21,20 +21,20 @@ class BaseService implements BaseServiceInterface
     /**
      * @param Builder|null $query
      * @param Model|null $model
-     * @param Collection|null $collection
+     * @param Collection|LengthAwarePaginator|ResourceCollection|array|null $collection
      * @param string|null $resource instance of JsonResource
      * @param string|null $resourceCollection instance of ResourceCollection
      * @param array $defaultData
-     * @param array $searchableColumns
+     * @param string|null $searcher instance of Callmeaf\Base\Utilities\V1\Contracts\SearcherInterface
      */
     public function __construct(
         protected ?Builder    $query = null,
         protected ?Model      $model = null,
-        protected ?Collection $collection = null,
+        protected Collection|LengthAwarePaginator|ResourceCollection|array|null $collection = null,
         protected ?string     $resource = null,
         protected ?string     $resourceCollection = null,
         protected array       $defaultData = [],
-        protected array       $searchableColumns = [],
+        protected ?string  $searcher = null,
     )
     {
 
@@ -86,16 +86,23 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function getCollection(bool $asResourceCollection = false): Collection|LengthAwarePaginator|ResourceCollection
+    public function getCollection(bool $asResourceCollection = false,bool $asResponseData = false,array $attributes = []): Collection|LengthAwarePaginator|ResourceCollection|array|null
     {
         $collection = $this->collection;
         if ($asResourceCollection) {
-            $collection = new $this->resourceCollection($collection);
+            /**
+             * @var ResourceCollection $collection
+             */
+            $collection = new $this->resourceCollection($collection,$attributes);
+            if($asResponseData) {
+                $collection = $collection->response()->getData(assoc: true);
+            }
         }
+
         return $collection;
     }
 
-    public function setCollection(Collection $collection): BaseService
+    public function setCollection(Collection|LengthAwarePaginator|ResourceCollection $collection): BaseService
     {
         $this->collection = $collection;
         return $this;
@@ -133,7 +140,20 @@ class BaseService implements BaseServiceInterface
 
     public function all(array $relations = [], array $columns = ['*'], array $filters = [], ?int $perPage = null, ?int $page = null): BaseService
     {
-        // TODO: Implement all() method.
+        $this->query->select(columns: $columns)->with(relations: $relations);
+        $this->search(filters: $filters);
+        if(config('callmeaf-base.always_paginated')) {
+            $request = request();
+            $page = $page ?? $request->query(config('callmeaf-base.page_key')) ?? config('callmeaf-base.default_page');
+            $perPage = $perPage ?? $request->query(config('callmeaf-base.per_page_key')) ?? config('callmeaf-base.default_per_page');
+        }
+        if($page && $perPage) {
+            $this->setCollection($this->query->paginate(perPage: $perPage,page: $page));
+        } else {
+            $this->setCollection($this->query->get());
+        }
+
+        return $this;
     }
 
     public function create(array $data): BaseService
@@ -198,33 +218,36 @@ class BaseService implements BaseServiceInterface
 
     protected function search(array $filters = []): BaseService
     {
-        $filters = collect($filters);
-        $searchableColumns = [
-            ...config('callmeaf-base.searchable_columns'),
-            ...$this->searchableColumns,
-        ];
-        foreach ($searchableColumns as $key => $column) {
-            $value = $filters->get($key);
-            if(is_null($value)) {
-                continue;
+        $this->query->where(function(Builder $query) use ($filters) {
+            $baseSearcher = config('callmeaf-base.searcher');
+            if($baseSearcher) {
+                /**
+                 * @var SearcherInterface|null $baseSearcher
+                 */
+                $baseSearcher = app($baseSearcher);
+                $baseSearcher->apply(query: $query,filters: $filters);
             }
-            if(is_array($column)) {
-                [$columnName,$operation] = $column;
-                $this->query->where($columnName,$operation,$value);
-            } else {
-                $this->query->where($column,$value);
-            }
-        }
-
-        $filters = $filters->filter(fn($item) => strlen(trim($item)))->values(); // remove null values
-        $this->query->where(function ($query) use ($searchableColumns,$filters) {
-            foreach ($searchableColumns as $key => $column) {
-                $value = $filters->get($key);
-                $query->orWhere($key,'like',"%$value%");
+        });
+        $this->query->where(function (Builder $query) use ($filters) {
+            $searcher = $this->searcher;
+            if($searcher) {
+                /**
+                 * @var SearcherInterface|null $searcher
+                 */
+                $searcher = app($searcher);
+                $searcher->apply(query: $query,filters: $filters);
             }
         });
 
-
         return $this;
+    }
+
+    protected function searchSymbol(string $value,?string $symbol = null): string
+    {
+        return match ($symbol) {
+            '%' => "%$value",
+            "%%" => "%$value%",
+            default => $value,
+        };
     }
 }
