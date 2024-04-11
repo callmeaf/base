@@ -18,7 +18,7 @@ interface BaseServiceInterface
     public function getQuery(): Builder;
     public function setQuery(Builder $query): BaseService;
     public function freshQuery(): BaseService;
-    public function getModel(bool $asResource = false,array $attributes = []): Model|JsonResource|null;
+    public function getModel(bool $asResource = false,array $attributes = [],array $relations = []): Model|JsonResource|null;
     public function getModelFromQuery(): Builder|Model;
     public function setModel(Model $model): BaseService;
     public function freshModel(): BaseService;

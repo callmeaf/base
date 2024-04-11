@@ -57,11 +57,14 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function getModel(bool $asResource = false,array $attributes = []): Model|JsonResource|null
+    public function getModel(bool $asResource = false,array $attributes = [],array $relations = []): Model|JsonResource|null
     {
         $model = $this->model;
         if(is_null($model)) {
             return $model;
+        }
+        if(!empty($relations)) {
+            $model = $model->loadMissing($relations);
         }
         if ($asResource) {
             $model = new $this->resource($model,$attributes);
