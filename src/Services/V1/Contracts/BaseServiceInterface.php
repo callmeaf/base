@@ -28,8 +28,8 @@ interface BaseServiceInterface
     public function exists(): bool;
     public function first(): BaseService;
     public function all(array $relations = [],array $columns = ['*'],array $filters = [],?int $perPage = null,?int $page = null): BaseService;
-    public function create(array $data): BaseService;
-    public function update(array $data): BaseService;
+    public function create(array $data,?array $events = []): BaseService;
+    public function update(array $data,?array $events = []): BaseService;
     public function updateOrCreate(array $identifies,array $data): BaseService;
     public function delete(): BaseService;
     public function forceDelete(int|string|null $id = null,string $column = 'id'): BaseService;

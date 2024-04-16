@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\HasMedia;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -159,19 +160,25 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function create(array $data): BaseService
+    public function create(array $data,?array $events = []): BaseService
     {
         $this->model = $this->query->create(
             $this->mergeData($data)
         );
 
+        foreach ($events as $event) {
+            $event::dispatch($this->model);
+        }
         return $this;
     }
 
-    public function update(array $data): BaseService
+    public function update(array $data,?array $events = []): BaseService
     {
         $this->model->update($data);
         $this->model = $this->model->refresh();
+        foreach ($events as $event) {
+            $event::dispatch($this->model);
+        }
         return $this;
     }
 
