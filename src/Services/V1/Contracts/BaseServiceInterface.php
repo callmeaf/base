@@ -25,14 +25,16 @@ interface BaseServiceInterface
     public function getCollection(bool $asResourceCollection = false,bool $asResponseData = false,array $attributes = []): Collection|LengthAwarePaginator|ResourceCollection|array|null;
     public function setCollection(Collection|LengthAwarePaginator|ResourceCollection $collection): BaseService;
     public function where(string|callable|array $column,string|array|null $valueOrOperation = null,null|string|array $value = null): BaseService;
+    public function onlyTrashed(): BaseService;
     public function exists(): bool;
-    public function first(): BaseService;
+    public function first(array $columns = ['*'],bool $failed = true): BaseService;
     public function all(array $relations = [],array $columns = ['*'],array $filters = [],?int $perPage = null,?int $page = null): BaseService;
     public function create(array $data,?array $events = []): BaseService;
     public function update(array $data,?array $events = []): BaseService;
     public function updateOrCreate(array $identifies,array $data): BaseService;
-    public function delete(): BaseService;
-    public function forceDelete(int|string|null $id = null,string $column = 'id'): BaseService;
+    public function delete(?array $events = []): BaseService;
+    public function restore(string|int $id,string $idColumn = 'id',array $columns = ['*'],?array $events = []): BaseService;
+    public function forceDelete(string|int $id,string $idColumn = 'id',array $columns = ['*'],?array $events = []): BaseService;
     public function createMedia(UploadedFile $file,MediaCollection $collection,MediaDisk $disk,bool $removeOlderMedia = true): BaseService;
     public function mergeData(array $data): array;
 }

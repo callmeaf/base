@@ -19,4 +19,11 @@ trait HasDate
             get: fn() => verta($this->updated_at)->format('Y-m-d H:i:s'),
         );
     }
+
+    public function deletedAtText(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => verta($this->updated_at)->format('Y-m-d H:i:s'),
+        );
+    }
 }

@@ -131,14 +131,24 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
+    public function onlyTrashed(): BaseService
+    {
+        $this->query->onlyTrashed();
+        return $this;
+    }
+
     public function exists(): bool
     {
         return $this->query->exists();
     }
 
-    public function first(): BaseService
+    public function first(array $columns = ['*'],bool $failed = true): BaseService
     {
-        $this->model = $this->query->first();
+        if($failed) {
+            $this->model = $this->query->firstOrFail($columns);
+        } else {
+            $this->model = $this->query->first($columns);
+        }
         return $this;
     }
 
@@ -166,9 +176,7 @@ class BaseService implements BaseServiceInterface
             $this->mergeData($data)
         );
 
-        foreach ($events as $event) {
-            $event::dispatch($this->model);
-        }
+        $this->eventsCaller($events);
         return $this;
     }
 
@@ -176,9 +184,7 @@ class BaseService implements BaseServiceInterface
     {
         $this->model->update($data);
         $this->model = $this->model->refresh();
-        foreach ($events as $event) {
-            $event::dispatch($this->model);
-        }
+        $this->eventsCaller($events);
         return $this;
     }
 
@@ -193,22 +199,30 @@ class BaseService implements BaseServiceInterface
         return $this;
    }
 
-   public function delete(): BaseService
+   public function delete(?array $events = []): BaseService
    {
        $this->model->delete();
+       $this->eventsCaller($events);
        return $this;
    }
 
-   public function forceDelete(int|string|null $id = null,string $column = 'id'): BaseService
+   public function restore(string|int $id,string $idColumn = 'id',array $columns = ['*'],?array $events = []): BaseService
    {
-       if(!$this->model) {
-           $this->freshQuery()->where($column,$id)->first();
-       }
-        $this->model->forceDelete();
-        return $this;
+       $this->freshQuery()->onlyTrashed()->where(column: $idColumn,valueOrOperation: $id)->first(columns: $columns);
+       $this->model->restore();
+       $this->eventsCaller($events);
+       return $this;
    }
 
-   public function createMedia(UploadedFile $file, MediaCollection $collection, MediaDisk $disk,bool $removeOlderMedia = true): BaseService
+   public function forceDelete(int|string $id, string $idColumn = 'id', array $columns = ['*'], ?array $events = []): BaseService
+   {
+       $this->freshQuery()->onlyTrashed()->where(column: $idColumn,valueOrOperation: $id)->first(columns: $columns);
+       $this->model->forceDelete();
+       $this->eventsCaller($events);
+       return $this;
+   }
+
+    public function createMedia(UploadedFile $file, MediaCollection $collection, MediaDisk $disk,bool $removeOlderMedia = true): BaseService
    {
        if(!($this->model instanceof HasMedia)) {
             throw new MustInstanceOfException(__('callmeaf-base::v1.errors.must_instance_if', ['target' => 'Model', 'source' => ' \Spatie\MediaLibrary\HasMedia']));
@@ -259,5 +273,12 @@ class BaseService implements BaseServiceInterface
             "%%" => "%$value%",
             default => $value,
         };
+    }
+
+    protected function eventsCaller(?array $events = []): void
+    {
+        foreach ($events as $event) {
+            $event::dispatch($this->model);
+        }
     }
 }

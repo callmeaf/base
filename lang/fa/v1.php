@@ -11,6 +11,10 @@ return [
     'successful_verified_email' => 'ایمیل با موفقیت تایید شد.',
     'successful_deleted' => 'با موفقیت حذف شد. ( :title )',
     'successful_deleted_non_title' => 'با موفقیت حذف شد.',
+    'successful_restored' => 'با موفقیت بازگردانی شد. ( :title )',
+    'successful_restored_non_title' => 'با موفقیت بازگردانی شد.',
+    'successful_force_destroyed' => 'با موفقیت از زباله دان حذف شد. ( :title )',
+    'successful_force_destroyed_non_title' => 'با موفقیت از زباله دان حذف شد.',
     'unknown_error' => 'خطای ناشناخته رخ داد. لطفا دقایقی دیگر مجددا تلاش کنید.',
     'errors' => [
         'to_many_attempts' => 'لطفاً چند دقیقه بعد دوباره امتحان کنید، در حال حاضر امتحان نکنید در غیر این صورت زمان بیشتری را مسدود خواهید شد.',
