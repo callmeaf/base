@@ -165,3 +165,17 @@ if(!function_exists('searcherLikeValue')) {
         return config('callmeaf-base.searcher_like_symbol') === '%' ? "$value%" : "%$value%";
     }
 }
+
+if (!function_exists('userCan')) {
+    /**
+     * @param \Callmeaf\Permission\Enums\PermissionName $permissionName
+     * @param \Illuminate\Http\Request|null $request
+     * @return bool
+     */
+    function userCan(\Callmeaf\Permission\Enums\PermissionName $permissionName, ?\Illuminate\Http\Request $request = null): bool
+    {
+        $request = $request ?? request();
+        return !!$request->user()?->can($permissionName->value);
+    }
+}
+

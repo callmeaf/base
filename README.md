@@ -5,4 +5,5 @@
 - Kavenegar apikey
 - Faraz sms apikey
 - Uncomment kernel sanctum middleware (security)
-- Env App url for spatie media
+- Env App url for spatie media and model config
+- spatie permission models config
