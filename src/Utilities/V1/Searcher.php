@@ -4,7 +4,6 @@ namespace Callmeaf\Base\Utilities\V1;
 
 use Callmeaf\Base\Utilities\V1\Contracts\SearcherInterface;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Log;
 
 class Searcher implements SearcherInterface
 {

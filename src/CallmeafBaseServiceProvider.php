@@ -2,7 +2,6 @@
 
 namespace Callmeaf\Base;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class CallmeafBaseServiceProvider extends ServiceProvider
