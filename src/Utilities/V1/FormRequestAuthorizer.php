@@ -42,6 +42,13 @@ abstract class FormRequestAuthorizer implements FormRequestAuthorizerInterface
         return false;
     }
 
+    public function statusUpdate(): bool
+    {
+        return false;
+    }
+
+
+
     public function destroy(): bool
     {
         return false;

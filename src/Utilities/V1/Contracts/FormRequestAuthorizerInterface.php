@@ -10,6 +10,7 @@ interface FormRequestAuthorizerInterface
     public function show(): bool;
     public function edit(): bool;
     public function update(): bool;
+    public function statusUpdate(): bool;
     public function destroy(): bool;
     public function trashed(): bool;
     public function restore(): bool;
