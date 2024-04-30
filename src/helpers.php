@@ -191,3 +191,14 @@ if(!function_exists('authUser')) {
     }
 }
 
+if(!function_exists('getTableName')) {
+    /**
+     * Get table name model
+     * @param string $model
+     * @return string
+     */
+    function getTableName(string $model): string
+    {
+        return app($model)->getTable();
+    }
+}
