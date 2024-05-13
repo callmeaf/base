@@ -189,7 +189,7 @@ class BaseService implements BaseServiceInterface
 
     public function updateOrCreate(array $identifies, array $data): BaseService
    {
-       $model = $this->freshQuery()->where($identifies)->first()->getModel();
+       $model = $this->freshQuery()->where($identifies)->first(failed: false)->getModel();
        if($model) {
            $this->update($data);
        } else {
@@ -213,9 +213,11 @@ class BaseService implements BaseServiceInterface
        return $this;
    }
 
-   public function forceDelete(int|string $id, string $idColumn = 'id', array $columns = ['*'], ?array $events = []): BaseService
+   public function forceDelete(int|string|null $id = null, string $idColumn = 'id', array $columns = ['*'], ?array $events = []): BaseService
    {
-       $this->freshQuery()->onlyTrashed()->where(column: $idColumn,valueOrOperation: $id)->first(columns: $columns);
+       if(!is_null($id)) {
+           $this->freshQuery()->onlyTrashed()->where(column: $idColumn,valueOrOperation: $id)->first(columns: $columns);
+       }
        $this->model->forceDelete();
        $this->eventsCaller($events);
        return $this;

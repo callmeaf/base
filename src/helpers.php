@@ -175,6 +175,7 @@ if (!function_exists('userCan')) {
     function userCan(\Callmeaf\Permission\Enums\PermissionName $permissionName, ?\Illuminate\Http\Request $request = null): bool
     {
         $request = $request ?? request();
+        \Illuminate\Support\Facades\Log::alert($request->user());
         return !!$request->user()?->can($permissionName->value);
     }
 }

@@ -34,7 +34,7 @@ interface BaseServiceInterface
     public function updateOrCreate(array $identifies,array $data): BaseService;
     public function delete(?array $events = []): BaseService;
     public function restore(string|int $id,string $idColumn = 'id',array $columns = ['*'],?array $events = []): BaseService;
-    public function forceDelete(string|int $id,string $idColumn = 'id',array $columns = ['*'],?array $events = []): BaseService;
+    public function forceDelete(string|int|null $id = null,string $idColumn = 'id',array $columns = ['*'],?array $events = []): BaseService;
     public function createMedia(UploadedFile $file,MediaCollection $collection,MediaDisk $disk,bool $removeOlderMedia = true): BaseService;
     public function mergeData(array $data): array;
 }
