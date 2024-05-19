@@ -155,7 +155,8 @@ if(!function_exists('isApiRequest'))
     function isApiRequest(?\Illuminate\Http\Request $request = null): bool
     {
         $request = $request ?? request();
-        return $request->is(config('callmeaf-base.api.prefix_url') . '/*');
+        $apiPrefixUrl = str(config('callmeaf-base.api.prefix_url'))->replace('{locale}','*')->append('/*')->toString();
+        return $request->is($apiPrefixUrl);
     }
 }
 
