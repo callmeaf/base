@@ -12,7 +12,7 @@ trait Localeable
     {
         static::creating(function(Model $model) {
             $model->forceFill([
-                'locale' => App::currentLocale(),
+                'locale' => $model->locale ?? App::currentLocale(),
             ]);
         });
 

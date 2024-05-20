@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait HasType
 {
-    public function scopeOfType(Builder $query,int $type)
+    public function scopeOfType(Builder $query,string|int $type)
     {
         $query->where('type',$type);
     }
@@ -18,7 +18,7 @@ trait HasType
         );
     }
 
-    public function isType(int $type): bool
+    public function isType(string|int $type): bool
     {
         return $this->type->value === $type;
     }

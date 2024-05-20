@@ -130,6 +130,12 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
+    public function select(array $columns = ['*']): BaseService
+    {
+        $this->query->select(columns: $columns);
+        return $this;
+    }
+
     public function onlyTrashed(): BaseService
     {
         $this->query->onlyTrashed();
