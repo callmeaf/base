@@ -183,12 +183,22 @@ if (!function_exists('userCan')) {
 if(!function_exists('authUser')) {
     /**
      * @param \Illuminate\Http\Request|null $request
-     * @return \Callmeaf\User\Models\User
+     * @return \Callmeaf\User\Models\User|null
      */
-    function authUser(?\Illuminate\Http\Request $request = null): \Callmeaf\User\Models\User
+    function authUser(?\Illuminate\Http\Request $request = null): ?\Callmeaf\User\Models\User
     {
         $request = $request ?? request();
         return $request->user();
+    }
+}
+
+if(!function_exists('authId')) {
+    /**
+     * @return string|int|null
+     */
+    function authId(): string|int|null
+    {
+        return \Illuminate\Support\Facades\Auth::id();
     }
 }
 
