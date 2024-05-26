@@ -18,7 +18,7 @@ interface BaseServiceInterface
     public function getQuery(): Builder;
     public function setQuery(Builder $query): BaseService;
     public function freshQuery(): BaseService;
-    public function getModel(bool $asResource = false,array $attributes = [],array $relations = []): Model|JsonResource|null;
+    public function getModel(bool $asResource = false,array $attributes = [],array $relations = [],?array $events = []): Model|JsonResource|null;
     public function getModelFromQuery(): Builder|Model;
     public function setModel(Model $model): BaseService;
     public function freshModel(): BaseService;
@@ -29,13 +29,13 @@ interface BaseServiceInterface
     public function onlyTrashed(): BaseService;
     public function exists(): bool;
     public function first(array $columns = ['*'],bool $failed = true): BaseService;
-    public function all(array $relations = [],array $columns = ['*'],array $filters = [],?int $perPage = null,?int $page = null): BaseService;
+    public function all(array $relations = [],array $columns = ['*'],array $filters = [],?int $perPage = null,?int $page = null,?array $events = []): BaseService;
     public function create(array $data,?array $events = []): BaseService;
     public function update(array $data,?array $events = []): BaseService;
     public function updateOrCreate(array $identifies,array $data): BaseService;
     public function delete(?array $events = []): BaseService;
     public function restore(string|int $id,string $idColumn = 'id',array $columns = ['*'],?array $events = []): BaseService;
     public function forceDelete(string|int|null $id = null,string $idColumn = 'id',array $columns = ['*'],?array $events = []): BaseService;
-    public function createMedia(UploadedFile $file,MediaCollection $collection,MediaDisk $disk,bool $removeOlderMedia = true): BaseService;
+    public function createMedia(?UploadedFile $file,MediaCollection $collection,MediaDisk $disk,bool $removeOlderMedia = true,?array $events = []): BaseService;
     public function mergeData(array $data): array;
 }

@@ -14,6 +14,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\MediaLibrary\HasMedia;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class BaseService implements BaseServiceInterface
@@ -57,7 +58,7 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function getModel(bool $asResource = false,array $attributes = [],array $relations = []): Model|JsonResource|null
+    public function getModel(bool $asResource = false,array $attributes = [],array $relations = [],?array $events = []): Model|JsonResource|null
     {
         $model = $this->model;
         if(is_null($model)) {
@@ -69,6 +70,7 @@ class BaseService implements BaseServiceInterface
         if ($asResource) {
             $model = new $this->resource($model,$attributes);
         }
+        $this->eventsCaller($events);
         return $model;
     }
 
@@ -89,7 +91,7 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function getCollection(bool $asResourceCollection = false,bool $asResponseData = false,array $attributes = []): Collection|LengthAwarePaginator|ResourceCollection|array|null
+    public function getCollection(bool $asResourceCollection = false,bool $asResponseData = false,array $attributes = [],?array $events = []): Collection|LengthAwarePaginator|ResourceCollection|array|null
     {
         $collection = $this->collection;
         if ($asResourceCollection) {
@@ -101,7 +103,7 @@ class BaseService implements BaseServiceInterface
                 $collection = $collection->response()->getData(assoc: true);
             }
         }
-
+        $this->eventsCaller($events);
         return $collection;
     }
 
@@ -157,7 +159,7 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function all(array $relations = [], array $columns = ['*'], array $filters = [], ?int $perPage = null, ?int $page = null): BaseService
+    public function all(array $relations = [], array $columns = ['*'], array $filters = [], ?int $perPage = null, ?int $page = null,?array $events = []): BaseService
     {
         $this->query->select(columns: $columns)->with(relations: $relations);
         $this->search(filters: $filters);
@@ -172,6 +174,7 @@ class BaseService implements BaseServiceInterface
             $this->setCollection($this->query->get());
         }
 
+        $this->eventsCaller($events);
         return $this;
     }
 
@@ -229,8 +232,11 @@ class BaseService implements BaseServiceInterface
        return $this;
    }
 
-    public function createMedia(UploadedFile $file, MediaCollection $collection, MediaDisk $disk,bool $removeOlderMedia = true): BaseService
+    public function createMedia(?UploadedFile $file, MediaCollection $collection, MediaDisk $disk,bool $removeOlderMedia = true,?array $events = []): BaseService
    {
+       if(!($file instanceof UploadedFile)) {
+           throw new FileNotFoundException('');
+       }
        if(!($this->model instanceof HasMedia)) {
             throw new MustInstanceOfException(__('callmeaf-base::v1.errors.must_instance_if', ['target' => 'Model', 'source' => ' \Spatie\MediaLibrary\HasMedia']));
        }
@@ -239,6 +245,7 @@ class BaseService implements BaseServiceInterface
        }
 
        $this->model->addMedia(file: $file)->toMediaCollection(collectionName: $collection->value,diskName: $disk->value);
+       $this->eventsCaller($events);
         return $this;
    }
 
