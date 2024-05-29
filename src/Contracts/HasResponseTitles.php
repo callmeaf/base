@@ -4,5 +4,5 @@ namespace Callmeaf\Base\Contracts;
 
 interface HasResponseTitles
 {
-    public function responseTitles(string $key): string;
+    public function responseTitles(string $key,string $default = ''): string;
 }

@@ -9,6 +9,7 @@ if(!function_exists('apiResponse')) {
      * @param Exception|string|null $message
      * @param int|null $status
      * @return JsonResponse
+     *
      */
     function apiResponse(array $data = [],null|Exception|string $message = '',?int $status = null): JsonResponse
     {
@@ -28,7 +29,6 @@ if(!function_exists('apiResponse')) {
             $transformedData['data'] = $data;
         }
         $transformedData['message'] = $message ?? '';
-
         return response()->json($transformedData,$status ?: \Symfony\Component\HttpFoundation\Response::HTTP_EXPECTATION_FAILED);
     }
 }

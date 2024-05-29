@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\HasMedia;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -292,7 +293,7 @@ class BaseService implements BaseServiceInterface
     protected function eventsCaller(?array $events = []): void
     {
         foreach ($events as $event) {
-            $event::dispatch($this->model);
+            $event::dispatch($this->model ?? $this->collection);
         }
     }
 }
