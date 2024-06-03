@@ -10,6 +10,9 @@ trait HasMediaMethod
 {
     public function file(MediaCollection $mediaCollection): ?Media
     {
+        if($this->relationLoaded('media')) {
+            return $this->media->firstWhere('collection_name',$mediaCollection->value);
+        }
         return $this->media()->firstWhere('collection_name',$mediaCollection->value);
     }
     public function image(): Attribute

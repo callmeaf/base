@@ -213,3 +213,40 @@ if(!function_exists('getTableName')) {
         return app($model)->getTable();
     }
 }
+
+if (!function_exists('randomId')) {
+    /**
+     * @param int $length
+     * @return string
+     * @throws Exception
+     */
+    function randomId(int $length, string $prefix = ''): string
+    {
+        $result = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $result .= random_int(0, 9);
+        }
+
+        return $prefix . $result;
+    }
+}
+
+if(!function_exists('currencyFormat')) {
+    /**
+     * @param int|float|null $value
+     * @param bool $withCurrency
+     * @return string|null
+     */
+    function currencyFormat(int|null|float $value,bool $withCurrency = true): ?string
+    {
+        if(is_null($value)) {
+            return null;
+        }
+        $value = number_format($value);
+        if($withCurrency) {
+            $value .= ' ' . __('callmeaf-base::v1.$');
+        }
+        return $value;
+    }
+}
