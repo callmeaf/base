@@ -216,12 +216,16 @@ if(!function_exists('getTableName')) {
 
 if (!function_exists('randomId')) {
     /**
-     * @param int $length
-     * @return string
+     * @param int|null $length
+     * @param string|null $prefix
+     * @return string|null
      * @throws Exception
      */
-    function randomId(int $length, string $prefix = ''): string
+    function randomId(?int $length, ?string $prefix = ''): ?string
     {
+        if(is_null($length) || is_null($prefix)) {
+            return null;
+        }
         $result = '';
 
         for ($i = 0; $i < $length; $i++) {
@@ -236,16 +240,17 @@ if(!function_exists('currencyFormat')) {
     /**
      * @param int|float|null $value
      * @param bool $withCurrency
+     * @param string|null $locale
      * @return string|null
      */
-    function currencyFormat(int|null|float $value,bool $withCurrency = true): ?string
+    function currencyFormat(int|null|float $value,bool $withCurrency = true,?string $locale = null): ?string
     {
         if(is_null($value)) {
             return null;
         }
         $value = number_format($value);
         if($withCurrency) {
-            $value .= ' ' . __('callmeaf-base::v1.$');
+            $value .= ' ' . __('callmeaf-base::v1.$',locale: $locale);
         }
         return $value;
     }
