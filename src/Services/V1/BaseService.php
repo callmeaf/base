@@ -250,6 +250,15 @@ class BaseService implements BaseServiceInterface
         return $this;
    }
 
+   public function createMultiMedia(?array $files, MediaCollection $collection, MediaDisk $disk, bool $removeOlderMedia = true, ?array $events = []): BaseService
+   {
+       $files = $files ?? [];
+       foreach ($files as $file) {
+           $this->createMedia(file: $file,collection: $collection,disk: $disk,removeOlderMedia: $removeOlderMedia,events: $events);
+       }
+       return $this;
+   }
+
     public function mergeData(array $data): array
     {
         return array_merge($this->defaultData,$data);
