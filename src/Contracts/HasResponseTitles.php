@@ -2,7 +2,9 @@
 
 namespace Callmeaf\Base\Contracts;
 
+use Callmeaf\Base\Enums\ResponseTitle;
+
 interface HasResponseTitles
 {
-    public function responseTitles(string $key,string $default = ''): string;
+    public function responseTitles(ResponseTitle|string $key,string $default = ''): string;
 }

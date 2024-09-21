@@ -2,7 +2,6 @@
 
 namespace Callmeaf\Base\Utilities\V1;
 
-use Callmeaf\Auth\Utilities\V1\Register\Api\RegisterResources;
 use Callmeaf\Base\Utilities\V1\Contracts\ResourcesInterface;
 
 abstract class Resources implements ResourcesInterface
