@@ -3,6 +3,7 @@
 namespace Callmeaf\Base\Traits;
 
 use Callmeaf\Cart\Enums\CartType;
+use Callmeaf\Cart\Events\CartStored;
 use Callmeaf\Cart\Services\V1\CartService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -17,9 +18,14 @@ trait HasCarts
              * @var CartService $cartService
              */
             $cartService = app(config('callmeaf-cart.service'));
-            $model->carts()->create($cartService->mergeData([
+            $currentCart = $model->carts()->create($cartService->mergeData([
                 // merge your default data
             ]));
+            event(new CartStored($currentCart));
+            $futureCart = $model->carts()->create($cartService->mergeData([
+                'type' => CartType::FUTURE,
+            ]));
+            event(new CartStored($futureCart));
         });
     }
 

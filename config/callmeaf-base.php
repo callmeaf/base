@@ -32,4 +32,5 @@ return [
     'default_per_page' => 15,
     'page_key' => 'page',
     'per_page_key' => 'per_page',
+    'route_model_binding_key_for_authenticate_user' => '__auth',
 ];
