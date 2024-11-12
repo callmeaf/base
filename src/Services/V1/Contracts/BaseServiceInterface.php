@@ -24,12 +24,14 @@ interface BaseServiceInterface
     public function freshModel(): BaseService;
     public function getCollection(bool $asResourceCollection = false,bool $asResponseData = false,array $attributes = []): Collection|LengthAwarePaginator|ResourceCollection|array|null;
     public function setCollection(Collection|LengthAwarePaginator|ResourceCollection $collection): BaseService;
-    public function where(string|callable|array $column,string|array|null $valueOrOperation = null,null|string|array $value = null): BaseService;
+    public function where(string|callable|array $column,string|array|null $valueOrOperation = null,null|string|array $value = null,bool $not = false): BaseService;
+    public function whereNot(string|callable|array $column,string|array|null $valueOrOperation = null,null|string|array $value = null): BaseService;
     public function select(array $columns = ['*']): BaseService;
     public function onlyTrashed(): BaseService;
     public function exists(): bool;
     public function first(array $columns = ['*'],bool $failed = true): BaseService;
-    public function all(array $relations = [],array $columns = ['*'],array $filters = [],?int $perPage = null,?int $page = null,?array $events = []): BaseService;
+    public function orderBy(string $column = 'created_at',string $direction = 'desc'): BaseService;
+    public function all(array $relations = [],array $columns = ['*'],array $filters = [],?int $perPage = null,?int $page = null,?array $events = [],array $orderBy = ['created_at','desc']): BaseService;
     public function create(array $data,?array $events = []): BaseService;
     public function update(array $data,?array $events = []): BaseService;
     public function updateOrCreate(array $identifies,array $data): BaseService;

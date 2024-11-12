@@ -114,23 +114,41 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function where(callable|string|array $column, array|string|null $valueOrOperation = null, array|string|null $value = null): BaseService
+    public function where(callable|string|array $column, array|string|null $valueOrOperation = null, array|string|null $value = null,bool $not = false): BaseService
     {
         switch (true) {
             case is_callable($column) || is_array($column): {
-                $this->query->where($column);
+                if($not) {
+                    $this->query->whereNot($column);
+                } else {
+                    $this->query->where($column);
+                }
                 break;
             }
             case is_array($valueOrOperation) && is_string($column): {
-                $this->query->whereIn($column,$valueOrOperation);
+                if($not) {
+                    $this->query->whereNotIn($column,$valueOrOperation);
+                } else {
+                    $this->query->whereIn($column,$valueOrOperation);
+                }
                 break;
             }
             default: {
-                $this->query->where($column,$valueOrOperation,$value);
+                if($not) {
+                    $this->query->whereNot($column,$valueOrOperation,$value);
+                } else {
+                    $this->query->where($column,$valueOrOperation,$value);
+                }
+
             }
         }
 
         return $this;
+    }
+
+    public function whereNot(callable|array|string $column, array|string|null $valueOrOperation = null, array|string|null $value = null): BaseService
+    {
+        return $this->where(column: $column,valueOrOperation: $valueOrOperation,value: $value,not: true);
     }
 
     public function select(array $columns = ['*']): BaseService
@@ -160,8 +178,15 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function all(array $relations = [], array $columns = ['*'], array $filters = [], ?int $perPage = null, ?int $page = null,?array $events = []): BaseService
+    public function orderBy(string $column = 'created_at', string $direction = 'desc'): BaseService
     {
+        $this->query->orderBy(column: $column,direction: $direction);
+        return $this;
+    }
+
+    public function all(array $relations = [], array $columns = ['*'], array $filters = [], ?int $perPage = null, ?int $page = null,?array $events = [],array $orderBy = ['created_at','desc']): BaseService
+    {
+        $this->orderBy(column: $orderBy[0],direction: $orderBy[1]);
         $this->query->select(columns: $columns)->with(relations: $relations);
         $this->search(filters: $filters);
         if(config('callmeaf-base.always_paginated')) {
