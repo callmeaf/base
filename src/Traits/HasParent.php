@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 trait HasParent
 {
+    abstract public function parentModel(): string;
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(self::class,'parent_id','id');
+        return $this->belongsTo($this->parentModel(),'parent_id',$this->getKey());
     }
 }

@@ -19,6 +19,9 @@ class Searcher implements SearcherInterface
         if($value = $filters->get('status')) {
             $query->where('status',$value);
         }
+        if($value = $filters->get('parent_id')) {
+            $query->where('parent_id',$value);
+        }
         if($value = $filters->get('created_from')) {
             $query->where('created_at','>=',$value);
         }

@@ -161,9 +161,10 @@ if(!function_exists('isApiRequest'))
 }
 
 if(!function_exists('searcherLikeValue')) {
-    function searcherLikeValue(string|int|array $value): string
+    function searcherLikeValue(string|int|array $value,?string $likeSymbol = null): string
     {
-        return config('callmeaf-base.searcher_like_symbol') === '%' ? "$value%" : "%$value%";
+        $likeSymbol = $likeSymbol ?? config('callmeaf-base.searcher_like_symbol');
+        return $likeSymbol === '%' ? "$value%" : "%$value%";
     }
 }
 
