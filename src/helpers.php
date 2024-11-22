@@ -107,6 +107,35 @@ if(!function_exists('enumTranslator')) {
     }
 }
 
+if(!function_exists('enumAsOptions')) {
+    /**
+     * Enum transformer to array for use in select options in front
+     * @param array $cases
+     * @param array|string $languages can be simple array or eloquent class
+     * @param bool $asString
+     * @return array
+     */
+    function enumAsOptions(array $cases, array|string $languages, bool $asString = false): array
+    {
+        if(is_string($languages)) {
+            /**
+             * @var \Callmeaf\Base\Contracts\HasEnum $languages
+             */
+            $languages = app($languages);
+            $languages = $languages->enumsLang();
+        }
+        $options = [];
+        foreach ($cases as $case)
+        {
+            $options[] = [
+                'label' => enumTranslator($asString ? $case->value : $case, $languages),
+                'value' => $case->value,
+            ];
+        }
+        return $options;
+    }
+}
+
 if(!function_exists('toArrayResource'))
 {
     /**

@@ -7,6 +7,7 @@ return [
         'middlewares' => [
             'api',
         ],
+        'controller' => \Callmeaf\Base\Http\Controllers\V1\Api\ApiController::class,
     ],
     'web' => [
         'prefix_url' => '{locale}/callmeaf/v1',
@@ -14,6 +15,7 @@ return [
         'middlewares' => [
             'web'
         ],
+        'controller' => \Callmeaf\Base\Http\Controllers\V1\Web\WebController::class,
     ],
     'searcher' => \Callmeaf\Base\Utilities\V1\Searcher::class,
     'searcher_like_symbol' => '%', // %%

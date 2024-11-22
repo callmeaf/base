@@ -12,12 +12,14 @@ class CallmeafBaseServiceProvider extends ServiceProvider
     private const LANG_DIR = __DIR__ . '/../lang';
     private const LANG_NAMESPACE = 'callmeaf-base';
     private const LANG_GROUP = 'callmeaf-base-lang';
+    private const ROUTES_DIR = __DIR__ . '/../routes';
 
     public function boot()
     {
         require_once( __DIR__ . '/helpers.php');
         $this->registerConfig();
         $this->registerLang();
+        $this->registerRoute();
     }
 
     private function registerConfig(): void
@@ -27,6 +29,12 @@ class CallmeafBaseServiceProvider extends ServiceProvider
             self::CONFIGS_DIR . '/callmeaf-base.php' => config_path('callmeaf-base.php'),
         ],self::CONFIGS_GROUP);
     }
+
+    private function registerRoute(): void
+    {
+        $this->loadRoutesFrom(self::ROUTES_DIR . '/v1/api.php');
+    }
+
 
     private function registerLang(): void
     {
