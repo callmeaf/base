@@ -4,6 +4,7 @@ namespace Callmeaf\Base\Utilities\V1;
 
 use Callmeaf\Base\Utilities\V1\Contracts\SearcherInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 
 class Searcher implements SearcherInterface
 {
@@ -20,7 +21,11 @@ class Searcher implements SearcherInterface
             $query->where('status',$value);
         }
         if($value = $filters->get('parent_id')) {
-            $query->where('parent_id',$value);
+            if(strval($value) === 'null') {
+                $query->whereNull('parent_id');
+            } else {
+                $query->where('parent_id',$value);
+            }
         }
         if($value = $filters->get('created_from')) {
             $query->where('created_at','>=',$value);

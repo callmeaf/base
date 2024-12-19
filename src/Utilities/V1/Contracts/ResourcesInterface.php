@@ -6,7 +6,7 @@ use Callmeaf\Base\Utilities\V1\Resources;
 
 interface ResourcesInterface
 {
-    public function all(): array;
+    public function all(?string $key = null): mixed;
     public function relations(): array;
     public function attributes(): array;
     public function columns(): array;

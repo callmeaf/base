@@ -3,9 +3,15 @@
 namespace Callmeaf\Base\Utilities\V1;
 
 use Callmeaf\Base\Utilities\V1\Contracts\FormRequestValidatorInterface;
+use Illuminate\Http\Request;
 
 abstract class FormRequestValidator implements FormRequestValidatorInterface
 {
+    public function __construct(protected Request $request)
+    {
+    }
+
+
     public function index(): array
     {
         return [];

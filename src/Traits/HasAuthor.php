@@ -10,8 +10,16 @@ trait HasAuthor
     protected static function bootHasAuthor(): void
     {
         static::creating(function(Model $model) {
+            $authUser = authUser();
+            $author_id = null;
+            // Only super admin or admin can change author id in model
+            if($authUser && $authUser?->isSuperAdminOrAdmin()) {
+                $author_id = request()->get('author_id');
+            }
+
+            $author_id = $author_id ?? $authUser?->id;
             $model->forceFill([
-                'author_id' => request()->get('author_id') ?? authId(),
+                'author_id' => $author_id,
             ]);
         });
     }

@@ -7,29 +7,31 @@ use Callmeaf\Base\Utilities\V1\Contracts\ResourcesInterface;
 abstract class Resources implements ResourcesInterface
 {
     protected array $data = [];
-    public function all(): array
+    public function all(?string $key = null): mixed
     {
-        return $this->data;
+        return $key
+            ? $this->data[$key]
+            : $this->data;
     }
 
     public function relations(): array
     {
-        return $this->data['relations'];
+        return $this->all('relations');
     }
 
     public function attributes(): array
     {
-        return $this->data['attributes'];
+        return $this->all('attributes');
     }
 
     public function columns(): array
     {
-        return $this->data['columns'];
+        return $this->all('columns');
     }
 
     public function idColumn(): string
     {
-        return $this->data['id_column'];
+        return $this->all('id_column');
     }
 
     public function index(): self

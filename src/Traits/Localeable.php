@@ -2,7 +2,6 @@
 
 namespace Callmeaf\Base\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 
@@ -16,8 +15,6 @@ trait Localeable
             ]);
         });
 
-        static::addGlobalScope(function(Builder $query) {
-            $query->where('locale',App::currentLocale());
-        });
+        static::addGlobalScope(localScope());
     }
 }

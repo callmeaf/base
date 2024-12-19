@@ -51,7 +51,6 @@ if(!function_exists('validationManager')) {
               default => $rules[$key],
            };
        }
-
        return $rules->toArray();
     }
 }
@@ -283,5 +282,18 @@ if(!function_exists('currencyFormat')) {
             $value .= ' ' . __('callmeaf-base::v1.$',locale: $locale);
         }
         return $value;
+    }
+}
+
+if(!function_exists('localScope')) {
+    /**
+     * @param string|null $locale
+     * @return callable
+     */
+    function localScope(?string $locale = null): callable
+    {
+        return function(\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query) use ($locale) {
+            $query->where('locale',$locale ?? \Illuminate\Support\Facades\App::currentLocale());
+        };
     }
 }
