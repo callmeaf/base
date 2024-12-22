@@ -297,3 +297,20 @@ if(!function_exists('localScope')) {
         };
     }
 }
+
+
+if(!function_exists('publishedAndExpiredValidationRules')) {
+    function publishedAndExpiredValidationRules(null|string|\Callmeaf\Base\Enums\DateTimeFormat $dateFormat = null)
+    {
+        if(is_null($dateFormat)) {
+            $dateFormat = \Callmeaf\Base\Enums\DateTimeFormat::DATE_TIME_WITH_DASH_AND_TIME_WITH_DOUBLE_POINT;
+        }
+        if($dateFormat instanceof \Callmeaf\Base\Enums\DateTimeFormat) {
+            $dateFormat = $dateFormat->value;
+        }
+        return [
+            'published_at' => ['date_format:' . $dateFormat],
+            'expired_at' => ['date_format:' . $dateFormat],
+        ];
+    }
+}

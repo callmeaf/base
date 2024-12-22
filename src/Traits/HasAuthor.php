@@ -26,6 +26,6 @@ trait HasAuthor
 
     public function author(): BelongsTo
     {
-        return $this->belongsTo(config('auth.providers.users.model'),'author_id','id');
+        return $this->belongsTo(config('callmeaf-user.model'),'author_id','id');
     }
 }

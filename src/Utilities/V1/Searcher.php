@@ -45,5 +45,17 @@ class Searcher implements SearcherInterface
         if($value = $filters->get('deleted_to')) {
             $query->where('deleted_at','<=',$value);
         }
+        if($value = $filters->get('published_from')) {
+            $query->where('published_at','>=',$value);
+        }
+        if($value = $filters->get('published_to')) {
+            $query->where('published_at','<=',$value);
+        }
+        if($value = $filters->get('expired_from')) {
+            $query->where('expired_at','>=',$value);
+        }
+        if($value = $filters->get('expired_to')) {
+            $query->where('expired_at','<=',$value);
+        }
     }
 }
