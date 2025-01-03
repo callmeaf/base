@@ -35,6 +35,7 @@ interface BaseServiceInterface
     public function create(array $data,?array $events = []): BaseService;
     public function update(array $data,?array $events = []): BaseService;
     public function updateOrCreate(array $identifies,array $data): BaseService;
+    public function updateMeta(array $data,?bool $mergeData = null,bool $createMetaIfNotExists = true,?array $events = []): BaseService;
     public function delete(?array $events = []): BaseService;
     public function restore(string|int $id,string $idColumn = 'id',array $columns = ['*'],?array $events = []): BaseService;
     public function forceDelete(string|int|null $id = null,string $idColumn = 'id',array $columns = ['*'],?array $events = []): BaseService;

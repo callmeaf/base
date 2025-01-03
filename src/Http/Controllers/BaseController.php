@@ -6,10 +6,16 @@ use App\Http\Controllers\Controller;
 use Callmeaf\Base\Enums\EnumKey;
 use Callmeaf\Base\Http\Requests\V1\Api\EnumsRequest;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Http;
 
-class BaseController extends Controller
+class BaseController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [];
+    }
+
     public function http(Request $request)
     {
         return Http::withToken(token: $request->bearerToken());

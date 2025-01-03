@@ -233,7 +233,30 @@ class BaseService implements BaseServiceInterface
         return $this;
    }
 
-   public function delete(?array $events = []): BaseService
+   public function updateMeta(array $data, ?bool $mergeData = null,bool $createMetaIfNotExists = true,?array $events = []): BaseService
+   {
+       $meta = $this->model->meta;
+       if(is_null($meta)) {
+           $meta = $this->model->meta()->create();
+       }
+
+       if(is_null($mergeData)) {
+           $mergeData = config('callmeaf-meta.merge_old_data_with_new_data');
+       }
+        if($mergeData) {
+            $data = $meta->data->merge($data);
+        }
+
+       $meta->update([
+            'data' => $data,
+        ]);
+
+        $this->eventsCaller($events);
+
+        return $this;
+   }
+
+    public function delete(?array $events = []): BaseService
    {
        $this->model->delete();
        $this->eventsCaller($events);

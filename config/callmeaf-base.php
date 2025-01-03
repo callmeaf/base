@@ -11,14 +11,14 @@ return [
     ],
     'web' => [
         'prefix_url' => '{locale}/callmeaf/v1',
-        'prefix_route_name' => 'af.v1.',
+        'prefix_route_name' => 'callmeaf.v1.',
         'middlewares' => [
             'web'
         ],
         'controller' => \Callmeaf\Base\Http\Controllers\V1\Web\WebController::class,
     ],
     'searcher' => \Callmeaf\Base\Utilities\V1\Searcher::class,
-    'searcher_like_symbol' => '%', // %%
+    'searcher_like_symbol' => '%', // % or %%
     'default_searcher_validation' => [
         'status' => [],
         'type' => [],

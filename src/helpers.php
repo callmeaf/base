@@ -293,11 +293,10 @@ if(!function_exists('localScope')) {
     function localScope(?string $locale = null): callable
     {
         return function(\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query) use ($locale) {
-            $query->where('locale',$locale ?? \Illuminate\Support\Facades\App::currentLocale());
+            $query->where(column: 'locale',operator: $locale ?? \Illuminate\Support\Facades\App::currentLocale());
         };
     }
 }
-
 
 if(!function_exists('publishedAndExpiredValidationRules')) {
     function publishedAndExpiredValidationRules(null|string|\Callmeaf\Base\Enums\DateTimeFormat $dateFormat = null)
@@ -312,5 +311,19 @@ if(!function_exists('publishedAndExpiredValidationRules')) {
             'published_at' => ['date_format:' . $dateFormat],
             'expired_at' => ['date_format:' . $dateFormat],
         ];
+    }
+}
+
+if(!function_exists('isUsingClass')) {
+    function isUsingClass(string $sourceClass,string $targetClass): bool
+    {
+        return in_array(needle: $targetClass,haystack: class_uses_recursive($sourceClass),strict: true);
+    }
+}
+
+if(!function_exists('isUsingSoftDelete')) {
+    function isUsingSoftDelete(string $sourceClass): bool
+    {
+        return isUsingClass(sourceClass: $sourceClass,targetClass: \Illuminate\Database\Eloquent\SoftDeletes::class);
     }
 }
