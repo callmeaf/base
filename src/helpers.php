@@ -199,13 +199,13 @@ if(!function_exists('searcherLikeValue')) {
 if (!function_exists('userCan')) {
     /**
      * @param \Callmeaf\Permission\Enums\PermissionName $permissionName
-     * @param \Illuminate\Http\Request|null $request
+     * @param \Callmeaf\User\Models\User|null $user
      * @return bool
      */
-    function userCan(\Callmeaf\Permission\Enums\PermissionName $permissionName, ?\Illuminate\Http\Request $request = null): bool
+    function userCan(\Callmeaf\Permission\Enums\PermissionName $permissionName,?\Callmeaf\User\Models\User $user = null): bool
     {
-        $request = $request ?? request();
-        return !!$request->user()?->can($permissionName->value);
+        $user = $user ?? authUser();
+        return $user?->can($permissionName->value);
     }
 }
 
@@ -325,5 +325,13 @@ if(!function_exists('isUsingSoftDelete')) {
     function isUsingSoftDelete(string $sourceClass): bool
     {
         return isUsingClass(sourceClass: $sourceClass,targetClass: \Illuminate\Database\Eloquent\SoftDeletes::class);
+    }
+}
+
+if(!function_exists('getShortNameClass')) {
+    function getShortNameClass($objectOrClass): string
+    {
+        $refClass = new \ReflectionClass(objectOrClass: $objectOrClass);
+        return $refClass->getShortName();
     }
 }
