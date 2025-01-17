@@ -35,4 +35,7 @@ return [
     'page_key' => 'page',
     'per_page_key' => 'per_page',
     'route_model_binding_key_for_authenticate_user' => '__auth',
+    'api_response_result_key' => 'result',
+    'api_response_errors_key' => 'errors',
+    'api_response_message_key' => 'message'
 ];

@@ -24,11 +24,11 @@ if(!function_exists('apiResponse')) {
 
         $transformedData = [];
         if($errors = @$data['errors']) {
-            $transformedData['errors'] = $errors;
+            $transformedData[config('callmeaf-base.api_response_errors_key')] = $errors;
         } else {
-            $transformedData['data'] = $data;
+            $transformedData[config('callmeaf-base.api_response_result_key')] = $data;
         }
-        $transformedData['message'] = $message ?? '';
+        $transformedData[config('callmeaf-base.api_response_message_key')] = $message ?? '';
         return response()->json($transformedData,$status ?: \Symfony\Component\HttpFoundation\Response::HTTP_EXPECTATION_FAILED);
     }
 }
