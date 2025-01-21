@@ -18,7 +18,9 @@ return [
         'controller' => \Callmeaf\Base\Http\Controllers\V1\Web\WebController::class,
     ],
     'searcher' => \Callmeaf\Base\Utilities\V1\Searcher::class,
-    'searcher_like_symbol' => '%', // % or %%
+    'searcher_like_symbol' => '%%', // % or %%
+    // this only append to subclass searcher like UserSearcher.php, ( not append to Searcher.php  which is base searcher)
+    'searcher_subclass_query_function' => 'orWhere', // orWhere,where
     'default_searcher_validation' => [
         'status' => [],
         'type' => [],
