@@ -25,7 +25,7 @@ class BaseController extends Controller implements HasMiddleware
     {
         $enums = [];
         foreach (explode(',',$key) as $key) {
-            $enums[] = $this->enumDataByKey($key);
+            $enums[$key] = $this->enumDataByKey($key);
         }
         return $enums;
     }
@@ -83,12 +83,6 @@ class BaseController extends Controller implements HasMiddleware
                 'message' => "Match case not found. key: {$key} undefined."
             ],
         };
-
-        if($enum) {
-            $data = [
-                $enum->value => $data,
-            ];
-        }
 
         return $data;
     }
