@@ -2,6 +2,7 @@
 
 namespace Callmeaf\Base\Utilities\V1;
 
+use Callmeaf\Base\Enums\DateTimeFormat;
 use Callmeaf\Base\Utilities\V1\Contracts\SearcherInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
@@ -28,34 +29,34 @@ class Searcher implements SearcherInterface
             }
         }
         if($value = $filters->get('created_from')) {
-            $query->where('created_at','>=',jalaliToGregorian($value));
+            $query->whereDate('created_at','>=',jalaliToGregorian(date: $value,dateTimeFormat: DateTimeFormat::DATE_TIME_WITH_DASH));
         }
         if($value = $filters->get('created_to')) {
-            $query->where('created_at','<=',jalaliToGregorian($value));
+            $query->whereDate('created_at','<=',jalaliToGregorian(date: $value,dateTimeFormat: DateTimeFormat::DATE_TIME_WITH_DASH));
         }
         if($value = $filters->get('updated_from')) {
-            $query->where('updated_at','>=',jalaliToGregorian($value));
+            $query->whereDate('updated_at','>=',jalaliToGregorian(date: $value,dateTimeFormat: DateTimeFormat::DATE_TIME_WITH_DASH));
         }
         if($value = $filters->get('updated_to')) {
-            $query->where('updated_at','<=',jalaliToGregorian($value));
+            $query->whereDate('updated_at','<=',jalaliToGregorian(date: $value,dateTimeFormat: DateTimeFormat::DATE_TIME_WITH_DASH));
         }
         if($value = $filters->get('deleted_from')) {
-            $query->where('deleted_at','>=',jalaliToGregorian($value));
+            $query->whereDate('deleted_at','>=',jalaliToGregorian(date: $value,dateTimeFormat: DateTimeFormat::DATE_TIME_WITH_DASH));
         }
         if($value = $filters->get('deleted_to')) {
-            $query->where('deleted_at','<=',jalaliToGregorian($value));
+            $query->whereDate('deleted_at','<=',jalaliToGregorian(date: $value,dateTimeFormat: DateTimeFormat::DATE_TIME_WITH_DASH));
         }
         if($value = $filters->get('published_from')) {
-            $query->where('published_at','>=',jalaliToGregorian($value));
+            $query->whereDate('published_at','>=',jalaliToGregorian(date: $value,dateTimeFormat: DateTimeFormat::DATE_TIME_WITH_DASH));
         }
         if($value = $filters->get('published_to')) {
-            $query->where('published_at','<=',jalaliToGregorian($value));
+            $query->whereDate('published_at','<=',jalaliToGregorian(date: $value,dateTimeFormat: DateTimeFormat::DATE_TIME_WITH_DASH));
         }
         if($value = $filters->get('expired_from')) {
-            $query->where('expired_at','>=',jalaliToGregorian($value));
+            $query->whereDate('expired_at','>=',jalaliToGregorian(date: $value,dateTimeFormat: DateTimeFormat::DATE_TIME_WITH_DASH));
         }
         if($value = $filters->get('expired_to')) {
-            $query->where('expired_at','<=',jalaliToGregorian($value));
+            $query->whereDate('expired_at','<=',jalaliToGregorian(date: $value,dateTimeFormat: DateTimeFormat::DATE_TIME_WITH_DASH));
         }
     }
 }
