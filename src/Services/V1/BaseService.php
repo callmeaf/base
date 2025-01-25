@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\HasMedia;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -188,6 +187,9 @@ class BaseService implements BaseServiceInterface
     {
         $this->orderBy(column: $orderBy[0],direction: $orderBy[1]);
         $this->query->select(columns: $columns)->with(relations: $relations);
+
+
+
         $this->search(filters: $filters);
         if(config('callmeaf-base.always_paginated')) {
             $request = request();
@@ -314,6 +316,9 @@ class BaseService implements BaseServiceInterface
 
     protected function search(array $filters = []): BaseService
     {
+        if(@$filters['only_trashed']) {
+            $this->onlyTrashed();
+        }
         $this->query->where(function(Builder $query) use ($filters) {
             $baseSearcher = config('callmeaf-base.searcher');
             if($baseSearcher) {
