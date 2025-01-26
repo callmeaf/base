@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\LazyCollection;
 use Spatie\MediaLibrary\HasMedia;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -22,7 +23,7 @@ class BaseService implements BaseServiceInterface
     /**
      * @param Builder|null $query
      * @param Model|null $model
-     * @param Collection|LengthAwarePaginator|ResourceCollection|array|null $collection
+     * @param Collection|LengthAwarePaginator|ResourceCollection|LazyCollection|array|null $collection
      * @param string|null $resource instance of JsonResource
      * @param string|null $resourceCollection instance of ResourceCollection
      * @param array $defaultData
@@ -31,7 +32,7 @@ class BaseService implements BaseServiceInterface
     public function __construct(
         protected ?Builder    $query = null,
         protected ?Model      $model = null,
-        protected Collection|LengthAwarePaginator|ResourceCollection|array|null $collection = null,
+        protected Collection|LengthAwarePaginator|ResourceCollection|LazyCollection|array|null $collection = null,
         protected ?string     $resource = null,
         protected ?string     $resourceCollection = null,
         protected array       $defaultData = [],
@@ -91,7 +92,7 @@ class BaseService implements BaseServiceInterface
         return $this;
     }
 
-    public function getCollection(bool $asResourceCollection = false,bool $asResponseData = false,array $attributes = [],?array $events = []): Collection|LengthAwarePaginator|ResourceCollection|array|null
+    public function getCollection(bool $asResourceCollection = false,bool $asResponseData = false,array $attributes = [],?array $events = []): Collection|LengthAwarePaginator|ResourceCollection|LazyCollection|array|null
     {
         $collection = $this->collection;
         if ($asResourceCollection) {
@@ -107,7 +108,7 @@ class BaseService implements BaseServiceInterface
         return $collection;
     }
 
-    public function setCollection(Collection|LengthAwarePaginator|ResourceCollection $collection): BaseService
+    public function setCollection(Collection|LengthAwarePaginator|ResourceCollection|LazyCollection $collection): BaseService
     {
         $this->collection = $collection;
         return $this;
@@ -188,15 +189,20 @@ class BaseService implements BaseServiceInterface
         $this->orderBy(column: $orderBy[0],direction: $orderBy[1]);
         $this->query->select(columns: $columns)->with(relations: $relations);
 
-
-
         $this->search(filters: $filters);
+        $request = request();
         if(config('callmeaf-base.always_paginated')) {
-            $request = request();
             $page = $page ?? $request->query(config('callmeaf-base.page_key')) ?? config('callmeaf-base.default_page');
             $perPage = $perPage ?? $request->query(config('callmeaf-base.per_page_key')) ?? config('callmeaf-base.default_per_page');
         }
-        if($page && $perPage) {
+
+        if($perPage === config('callmeaf-base.all_page_lazy_key') && $request->routeIs(config('callmeaf-base.lazy_routes'))) {
+            $this->setCollection($this->query->lazy(chunkSize: config('callmeaf-base.all_page_lazy_chunk_size')));
+        } else if ($page && $perPage) {
+            if($perPage === config('callmeaf-base.all_page_lazy_key')) {
+                $perPage = config('callmeaf-base.default_per_page');
+                $page = 1;
+            }
             $this->setCollection($this->query->paginate(perPage: $perPage,page: $page));
         } else {
             $this->setCollection($this->query->get());
@@ -316,7 +322,7 @@ class BaseService implements BaseServiceInterface
 
     protected function search(array $filters = []): BaseService
     {
-        if(@$filters['only_trashed']) {
+        if(isOnlyTrashedQueryParam(params: $filters)) {
             $this->onlyTrashed();
         }
         $this->query->where(function(Builder $query) use ($filters) {

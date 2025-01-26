@@ -361,7 +361,14 @@ if(!function_exists('jalaliToGregorian')) {
     {
         $date = str(string: $date)->replace('/','-')->toString();
         $date = faToEn(string: $date);
-        $date = verta(datetime: $date)->toCarbon()->format(format: $dateTimeFormat->value);
-        return $date;
+        return verta(datetime: $date)->toCarbon()->format(format: $dateTimeFormat->value);
+    }
+}
+
+if(!function_exists('isOnlyTrashedQueryParam')) {
+    function isOnlyTrashedQueryParam(?array $params = null,string $key = 'only_trashed'): bool
+    {
+        $params = $params ?? request()->query();
+        return strval(@$params[$key]) === 'true';
     }
 }

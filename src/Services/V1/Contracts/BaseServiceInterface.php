@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\LazyCollection;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface BaseServiceInterface
@@ -22,8 +23,8 @@ interface BaseServiceInterface
     public function getModelFromQuery(): Builder|Model;
     public function setModel(Model $model): BaseService;
     public function freshModel(): BaseService;
-    public function getCollection(bool $asResourceCollection = false,bool $asResponseData = false,array $attributes = []): Collection|LengthAwarePaginator|ResourceCollection|array|null;
-    public function setCollection(Collection|LengthAwarePaginator|ResourceCollection $collection): BaseService;
+    public function getCollection(bool $asResourceCollection = false,bool $asResponseData = false,array $attributes = []): Collection|LengthAwarePaginator|ResourceCollection|LazyCollection|array|null;
+    public function setCollection(Collection|LengthAwarePaginator|ResourceCollection|LazyCollection $collection): BaseService;
     public function where(string|callable|array $column,string|array|null $valueOrOperation = null,null|string|array $value = null,bool $not = false): BaseService;
     public function whereNot(string|callable|array $column,string|array|null $valueOrOperation = null,null|string|array $value = null): BaseService;
     public function select(array $columns = ['*']): BaseService;

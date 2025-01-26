@@ -11,7 +11,10 @@ class Searcher implements SearcherInterface
 {
     public function apply(Builder $query,array $filters = []): void
     {
-        $filters = collect($filters)->filter(fn($item) => strlen(trim($item)));
+        $filters = collect($filters)->filter(function($item) {
+            $item = trim(strval($item));
+            return !empty($item) && $item !== 'null';
+        });
         if($value = $filters->get('status')) {
             $query->where('status',$value);
         }

@@ -36,6 +36,11 @@ return [
     'default_per_page' => 15,
     'page_key' => 'page',
     'per_page_key' => 'per_page',
+    "all_page_lazy_key" => 'all',
+    "all_page_lazy_chunk_size" => 100,
+    "lazy_routes" => [
+        "excels.*"
+    ],
     'route_model_binding_key_for_authenticate_user' => '__auth',
     'api_response_result_key' => 'result',
     'api_response_errors_key' => 'errors',
