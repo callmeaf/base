@@ -11,4 +11,9 @@ trait HasParent
     {
         return $this->belongsTo($this->parentModel(),'parent_id',$this->getKey());
     }
+
+    public function hasParent(): bool
+    {
+        return !is_null($this->parent_id);
+    }
 }
