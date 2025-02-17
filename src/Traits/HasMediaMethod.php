@@ -31,6 +31,13 @@ trait HasMediaMethod
         );
     }
 
+    public function images(): Attribute
+    {
+        return Attribute::get(
+            fn() => $this->files(MediaCollection::IMAGES),
+        );
+    }
+
     public function documents(): Attribute
     {
         return Attribute::get(

@@ -29,8 +29,6 @@ if(!function_exists('apiResponse')) {
             $transformedData[config('callmeaf-base.api_response_result_key')] = $data;
         }
         $transformedData[config('callmeaf-base.api_response_message_key')] = $message ?? '';
-
-
         return response()->json($transformedData,$status ?: \Symfony\Component\HttpFoundation\Response::HTTP_EXPECTATION_FAILED);
     }
 }
