@@ -107,9 +107,15 @@ if (! function_exists('isPostmanRequest')) {
 if (! function_exists('packagePath')) {
     function packagePath(string $package, string $path = ''): string
     {
+        $vendorPath = base_path("vendor");
         if ($path) {
             $package .= "/$path";
         }
+
+        if(is_dir("$vendorPath/$package")) {
+            return "$vendorPath/$package";
+        }
+
         return base_path("packages/$package");
     }
 }
