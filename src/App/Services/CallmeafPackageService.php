@@ -40,7 +40,7 @@ class CallmeafPackageService
     public function makePackage(): self
     {
         $packageDir = $this->packageDir();
-        $result = $this->mkdir($packageDir);
+        $result = $this->mkdir($packageDir,true);
 
         if (! $result) {
             throw new Error("Failed to {$this->errorType} package $packageDir");
