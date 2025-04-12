@@ -35,4 +35,10 @@ return [
     ],
     'page_key' => 'page',
     'per_page_key' => 'per_page',
+    'search_value_format' => '%%%s%%',
+    'export_chunk_size' => 200,
+    'export_rate_limit_request' => 5, // per minute for send export request ( in throttle middleware )
+    'import_chunk_size' => 200,
+    'import_rate_limit_request' => 5, // per minute for send import request ( in throttle middleware )
+    'trashed_key' => 'trashed', // set ?trashed=true in url for get trashed data
 ];

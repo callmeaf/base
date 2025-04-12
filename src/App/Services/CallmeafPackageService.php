@@ -64,6 +64,8 @@ class CallmeafPackageService
         $this->controller();
         $this->route();
         $this->lang();
+        $this->import();
+        $this->export();
 
         return $this;
     }
@@ -85,10 +87,10 @@ class CallmeafPackageService
         $route = str($this->packageName)->plural()->snake()->toString();
         $version = str($this->version)->ucfirst()->toString();
         $controller = str($this->packageName)->singular()->snake()->lower()->toString();
-
+        $pluralModel = str($this->packageName)->headline()->plural()->toString();
         $result = $this->mkfile(path: $this->packageDir(
             append: "config/callmeaf-{$configName}-{$this->version}.php"),
-            contents: str_replace(['{{ $model }}', '{{ $route }}', '{{ $version }}', '{{ $controller }}'], [$this->packageName, $route, $version, $controller], $this->stub(key: 'config'))
+            contents: str_replace(['{{ $model }}', '{{ $route }}', '{{ $version }}', '{{ $controller }}','{{ $pluralModel }}'], [$this->packageName, $route, $version, $controller,$pluralModel], $this->stub(key: 'config'))
         );
         if (! $result) {
             $this->pushError(message: "Failed to {$this->errorType} config file {$configName}");
@@ -486,6 +488,62 @@ class CallmeafPackageService
                 if (! $result) {
                     $this->pushError(message: "Failed to {$this->errorType} lang file {$this->packageName} {$this->version} {$guard} {$locale}");
                 }
+            }
+        }
+
+        return $this;
+    }
+
+    public function import(): self
+    {
+        $this->ensurePackageMade();
+
+        $moduleName = $this->packageName;
+        $version = str($this->version)->ucfirst()->toString();
+        foreach ($this->guards as $guard) {
+            $guard = str($guard)->ucfirst()->toString();
+
+            $importPath = "src/App/Imports/$guard/$version";
+            $result = $this->mkdir(path: $this->packageDir(append: $importPath), recursive: true);
+            if (! $result) {
+                $this->pushError(message: "Failed to {$this->errorType} import folder {$moduleName}");
+            }
+
+            $importName = str($moduleName)->headline()->plural()->toString();
+            $repo = str($moduleName)->lower()->singular()->toString();
+            $result = $this->mkfile(path: $this->packageDir(
+                append: "$importPath/$importName.php",
+            ), contents: str_replace(['{{ $model }}','{{ $guard }}','{{ $version }}','{{ $importName }}','{{ $repo }}'], [$moduleName,$guard,$version,$importName,$repo], $this->stub(key: "import.excel")));
+            if (! $result) {
+                $this->pushError(message: "Failed to {$this->errorType} import file {$moduleName} {$this->version} {$guard}");
+            }
+        }
+
+        return $this;
+    }
+
+    public function export(): self
+    {
+        $this->ensurePackageMade();
+
+        $moduleName = $this->packageName;
+        $version = str($this->version)->ucfirst()->toString();
+        foreach ($this->guards as $guard) {
+            $guard = str($guard)->ucfirst()->toString();
+
+            $exportPath = "src/App/Exports/$guard/$version";
+            $result = $this->mkdir(path: $this->packageDir(append: $exportPath), recursive: true);
+            if (! $result) {
+                $this->pushError(message: "Failed to {$this->errorType} export folder {$moduleName}");
+            }
+
+            $exportName = str($moduleName)->headline()->plural()->toString();
+            $repo = str($moduleName)->lower()->singular()->toString();
+            $result = $this->mkfile(path: $this->packageDir(
+                append: "$exportPath/$exportName.php",
+            ), contents: str_replace(['{{ $model }}','{{ $guard }}','{{ $version }}','{{ $exportName }}','{{ $repo }}'], [$moduleName,$guard,$version,$exportName,$repo], $this->stub(key: "export.excel")));
+            if (! $result) {
+                $this->pushError(message: "Failed to {$this->errorType} export file {$moduleName} {$this->version} {$guard}");
             }
         }
 

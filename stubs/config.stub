@@ -130,4 +130,26 @@ return [
          'status' => \Callmeaf\{{ $model }}\App\Enums\{{ $model }}Status::class,
          'type' => \Callmeaf\{{ $model }}\App\Enums\{{ $model }}Type::class,
     ],
+     'exports' => [
+        RequestType::API->value => [
+            'excel' => \Callmeaf\{{ $model }}\App\Exports\Api\V1\{{ $pluralModel }}Export::class,
+        ],
+        RequestType::WEB->value => [
+            'excel' => \Callmeaf\{{ $model }}\App\Exports\Web\V1\{{ $pluralModel }}Export::class,
+        ],
+        RequestType::ADMIN->value => [
+            'excel' => \Callmeaf\{{ $model }}\App\Exports\Admin\V1\{{ $pluralModel }}Export::class,
+        ],
+     ],
+     'imports' => [
+         RequestType::API->value => [
+             'excel' => \Callmeaf\{{ $model }}\App\Imports\Api\V1\{{ $pluralModel }}Import::class,
+         ],
+         RequestType::WEB->value => [
+             'excel' => \Callmeaf\{{ $model }}\App\Imports\Web\V1\{{ $pluralModel }}Import::class,
+         ],
+         RequestType::ADMIN->value => [
+             'excel' => \Callmeaf\{{ $model }}\App\Imports\Admin\V1\{{ $pluralModel }}Import::class,
+         ],
+     ],
 ];

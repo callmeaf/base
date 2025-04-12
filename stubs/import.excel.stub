@@ -1,0 +1,56 @@
+<?php
+
+namespace Callmeaf\{{ $model }}\App\Imports\{{ $guard }}\{{ $version }};
+
+use Callmeaf\Base\App\Services\Importer;
+use Callmeaf\{{ $model }}\App\Enums\{{ $model }}Status;
+use Callmeaf\{{ $model }}\App\Repo\Contracts\{{ $model }}RepoInterface;
+use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithStartRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
+
+class {{ $importName }}Import extends Importer implements ToCollection,WithChunkReading,WithStartRow,SkipsEmptyRows,WithValidation,WithHeadingRow
+{
+    private {{ $model }}RepoInterface ${{ $repo }}Repo;
+
+    public function __construct()
+    {
+        $this->{{ $repo }}Repo = app({{ $model }}RepoInterface::class);
+    }
+
+    public function collection(Collection $collection)
+    {
+        $this->total = $collection->count();
+
+        foreach ($collection as $row) {
+            $this->{{ $repo }}Repo->freshQuery()->create([
+                // 'status' => $row['status'],
+            ]);
+            ++$this->success;
+        }
+    }
+
+    public function chunkSize(): int
+    {
+        return \Base::config('import_chunk_size');
+    }
+
+    public function startRow(): int
+    {
+        return 2;
+    }
+
+    public function rules(): array
+    {
+        $table = $this->{{ $repo }}Repo->getTable();
+        return [
+            // 'status' => ['required',Rule::enum({{ $model }}Status::class)],
+        ];
+    }
+
+}

@@ -43,7 +43,7 @@ class CallmeafPackageCommand extends Command
             return 1;
         }
 
-        $options = ['all', 'model', 'repo', 'resource', 'event', 'request', 'controller', 'route', 'lang', 'migration', 'enum'];
+        $options = ['all', 'model', 'repo', 'resource', 'event', 'request', 'controller', 'route', 'lang', 'migration', 'enum','import','export'];
         $userSelectedOptions = $this->choice("Which options you want to create for {$package} package", $options, default: 0, multiple: true);
 
         if (! empty(array_filter($userSelectedOptions, fn($item) => $item === 'all'))) {
