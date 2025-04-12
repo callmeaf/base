@@ -107,7 +107,7 @@ if (! function_exists('isPostmanRequest')) {
 if (! function_exists('packagePath')) {
     function packagePath(string $package, string $path = ''): string
     {
-        $vendorPath = base_path("vendor");
+        $vendorPath = base_path("vendor/callmeaf");
         if ($path) {
             $package .= "/$path";
         }
