@@ -43,5 +43,6 @@ return [
     'export_rate_limit_request' => 5, // per minute for send export request ( in throttle middleware )
     'import_chunk_size' => 200,
     'import_rate_limit_request' => 5, // per minute for send import request ( in throttle middleware )
-    'trashed_key' => 'trashed' // set ?trashed=true in url for get trashed data
+    'trashed_key' => 'trashed', // set ?trashed=true in url for get trashed data
+
 ];

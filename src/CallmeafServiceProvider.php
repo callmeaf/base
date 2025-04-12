@@ -13,6 +13,7 @@ use Callmeaf\Base\Contracts\ServiceProvider\HasMiddleware;
 use Callmeaf\Base\Contracts\ServiceProvider\HasMigration;
 use Callmeaf\Base\Contracts\ServiceProvider\HasRepo;
 use Callmeaf\Base\Contracts\ServiceProvider\HasRoute;
+use Callmeaf\Base\Contracts\ServiceProvider\HasView;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Application;
 use Illuminate\Routing\Router;
@@ -52,6 +53,7 @@ abstract class CallmeafServiceProvider extends ServiceProvider
             $this->registerRoute();
             $this->registerMigration();
             $this->registerMiddleware();
+            $this->registerView();
         }
     }
 
@@ -238,8 +240,23 @@ abstract class CallmeafServiceProvider extends ServiceProvider
         }
     }
 
+    private function registerView(): void
+    {
+        if ($this instanceof HasView) {
+            $viewDir = $this->dir(path: '/../resources/views');
+            $serviceKey = $this->serviceKey();
+            $viewGroup = self::PREFIX_KEY . $serviceKey;
+            $this->loadViewsFrom($viewDir, $viewGroup);
+
+            $this->publishes([
+                $viewDir => resource_path("views/vendor/$viewGroup")
+            ]);
+        }
+    }
+
     private function setConfigStatus(bool $value): void
     {
         $this->CONFIG_STATUS = $value;
     }
+
 }

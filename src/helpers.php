@@ -47,6 +47,8 @@ if (!function_exists('requestVersion')) {
                 }
             }
 
+            logger('$version');
+            logger($version);
             if (! in_array($version, allExistsVersion())) {
                 throw new \Error("Version of {$version} for base does not exists");
             }
