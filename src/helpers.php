@@ -110,15 +110,12 @@ if (! function_exists('packagePath')) {
     function packagePath(string $package, string $path = ''): string
     {
         $vendorPath = base_path("vendor/callmeaf");
-        if ($path) {
-            $package .= "/$path";
-        }
 
         if(is_dir("$vendorPath/$package")) {
-            return "$vendorPath/$package";
+            return "$vendorPath/$package" . ($path ? "/$path" : '');
         }
 
-        return base_path("packages/$package");
+        return base_path("packages/$package" . ($path ? "/$path" : ''));
     }
 }
 
