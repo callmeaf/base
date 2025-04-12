@@ -1,0 +1,26 @@
+{
+    "name": "callmeaf/{{ $package }}",
+    "description": "Manage {{ $desc }}",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Callmeaf\\{{ $model }}\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "callmeaf",
+            "email": "alikhoshkar2000@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Callmeaf\\{{ $model }}\\Callmeaf{{ $model }}ServiceProvider"
+            ]
+        }
+    }
+}

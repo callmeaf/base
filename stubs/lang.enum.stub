@@ -1,0 +1,15 @@
+<?php
+
+use Callmeaf\{{ $model }}\App\Enums\{{ $model }}Status;
+use Callmeaf\{{ $model }}\App\Enums\{{ $model }}Type;
+
+return [
+    {{ $model }}Status::class => [
+        {{ $model }}Status::ACTIVE->name => 'Active',
+        {{ $model }}Status::INACTIVE->name => 'InActive',
+        {{ $model }}Status::PENDING->name => 'Pending',
+    ],
+    {{ $model }}Type::class => [
+        //
+    ],
+];

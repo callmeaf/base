@@ -1,0 +1,78 @@
+<?php
+
+namespace Callmeaf\{{ $model }}\App\Http\Controllers\{{ $guard }}\{{ $version }};
+
+use Callmeaf\Base\App\Http\Controllers\{{ $guard }}\{{ $version }}\{{ $guard }}Controller;
+use Callmeaf\{{ $model }}\App\Repo\Contracts\{{ $model }}RepoInterface;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+
+class {{ $model }}Controller extends {{ $guard }}Controller implements HasMiddleware
+{
+    public function __construct(protected {{ $model }}RepoInterface ${{ $var }}Repo)
+    {
+        parent::__construct($this->{{ $var }}Repo->config);
+    }
+
+    public static function middleware(): array
+    {
+        return [
+           //
+        ];
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        return $this->{{ $var }}Repo->latest()->search()->paginate();
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store()
+    {
+        return $this->{{ $var }}Repo->create(data: $this->request->validated());
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        return $this->{{ $var }}Repo->findById(value: $id);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(string $id)
+    {
+        return $this->{{ $var }}Repo->update(id: $id, data: $this->request->validated());
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        return $this->{{ $var }}Repo->delete(id: $id);
+    }
+
+    public function trashed()
+    {
+        return $this->{{ $var }}Repo->trashed()->latest()->search()->paginate();
+    }
+
+    public function restore(string $id)
+    {
+        return $this->{{ $var }}Repo->restore(id: $id);
+    }
+
+    public function forceDestroy(string $id)
+    {
+        return $this->{{ $var }}Repo->forceDelete(id: $id);
+    }
+}

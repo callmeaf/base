@@ -1,0 +1,38 @@
+<?php
+
+return [
+    \Callmeaf\Base\App\Enums\RequestType::API->value => [
+        'prefix' => 'api',
+        'as' => 'api.',
+        'middleware' => ['api'],
+        'version' => '{{ $version }}',
+        'append_version_to_prefix' => true,
+    ],
+    \Callmeaf\Base\App\Enums\RequestType::WEB->value => [
+        'prefix' => '',
+        'as' => '',
+        'middleware' => [],
+        'version' => '{{ $version }}',
+        'append_version_to_prefix' => true,
+    ],
+    \Callmeaf\Base\App\Enums\RequestType::ADMIN->value => [
+        'prefix' => 'admin',
+        'as' => 'admin.',
+        'middleware' => ['admin'],
+        'version' => '{{ $version }}',
+        'append_version_to_prefix' => true,
+    ],
+    'facades' => [
+        [
+            'alias' => 'Base',
+            'service' => \Callmeaf\Base\App\Services\BaseService::class,
+            'facade' => \Callmeaf\Base\App\Facades\BaseFacade::class,
+        ],
+    ],
+    'locales' => [
+        'fa',
+        'en',
+    ],
+    'page_key' => 'page',
+    'per_page_key' => 'per_page',
+];

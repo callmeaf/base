@@ -1,0 +1,27 @@
+<?php
+
+namespace Callmeaf\{{ $model }}\App\Models;
+
+use Callmeaf\Base\App\Models\BaseModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class {{ $model }} extends BaseModel
+{
+    // use SoftDeletes;
+
+    protected $fillable = [
+        //
+    ];
+
+    public static function configKey(): string
+    {
+        return 'callmeaf-{{ $config }}';
+    }
+
+    protected function casts(): array
+    {
+        return [
+            ...(self::config()['enums'] ?? []),
+        ];
+    }
+}

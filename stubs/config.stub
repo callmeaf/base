@@ -1,0 +1,133 @@
+<?php
+
+use Callmeaf\Base\App\Enums\RequestType;
+
+return [
+    'model' => \Callmeaf\{{ $model }}\App\Models\{{ $model }}::class,
+    'route_key_name' => 'id',
+    'repo' => \Callmeaf\{{ $model }}\App\Repo\{{ $version }}\{{ $model }}Repo::class,
+    'resources' => [
+        RequestType::API->value => [
+            'resource' => \Callmeaf\{{ $model }}\App\Http\Resources\Api\{{ $version }}\{{ $model }}Resource::class,
+            'resource_collection' => \Callmeaf\{{ $model }}\App\Http\Resources\Api\{{ $version }}\{{ $model }}Collection::class,
+        ],
+        RequestType::WEB->value => [
+            'resource' => \Callmeaf\{{ $model }}\App\Http\Resources\Web\{{ $version }}\{{ $model }}Resource::class,
+            'resource_collection' => \Callmeaf\{{ $model }}\App\Http\Resources\Web\{{ $version }}\{{ $model }}Collection::class,
+        ],
+        RequestType::ADMIN->value => [
+            'resource' => \Callmeaf\{{ $model }}\App\Http\Resources\Admin\{{ $version }}\{{ $model }}Resource::class,
+            'resource_collection' => \Callmeaf\{{ $model }}\App\Http\Resources\Admin\{{ $version }}\{{ $model }}Collection::class,
+        ],
+    ],
+    'events' => [
+        RequestType::API->value => [
+            \Callmeaf\{{ $model }}\App\Events\Api\{{ $version }}\{{ $model }}Indexed::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Api\{{ $version }}\{{ $model }}Created::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Api\{{ $version }}\{{ $model }}Showed::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Api\{{ $version }}\{{ $model }}Updated::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Api\{{ $version }}\{{ $model }}Deleted::class => [
+                // listeners
+            ],
+        ],
+        RequestType::WEB->value => [
+            \Callmeaf\{{ $model }}\App\Events\Web\{{ $version }}\{{ $model }}Indexed::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Web\{{ $version }}\{{ $model }}Created::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Web\{{ $version }}\{{ $model }}Showed::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Web\{{ $version }}\{{ $model }}Updated::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Web\{{ $version }}\{{ $model }}Deleted::class => [
+                // listeners
+            ],
+        ],
+        RequestType::ADMIN->value => [
+            \Callmeaf\{{ $model }}\App\Events\Admin\{{ $version }}\{{ $model }}Indexed::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Admin\{{ $version }}\{{ $model }}Created::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Admin\{{ $version }}\{{ $model }}Showed::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Admin\{{ $version }}\{{ $model }}Updated::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Admin\{{ $version }}\{{ $model }}Deleted::class => [
+                // listeners
+            ],
+        ],
+    ],
+    'requests' => [
+        RequestType::API->value => [
+            'index' => \Callmeaf\{{ $model }}\App\Http\Requests\Api\{{ $version }}\{{ $model }}IndexRequest::class,
+            'store' => \Callmeaf\{{ $model }}\App\Http\Requests\Api\{{ $version }}\{{ $model }}StoreRequest::class,
+            'show' => \Callmeaf\{{ $model }}\App\Http\Requests\Api\{{ $version }}\{{ $model }}ShowRequest::class,
+            'update' => \Callmeaf\{{ $model }}\App\Http\Requests\Api\{{ $version }}\{{ $model }}UpdateRequest::class,
+            'destroy' => \Callmeaf\{{ $model }}\App\Http\Requests\Api\{{ $version }}\{{ $model }}DestroyRequest::class,
+        ],
+        RequestType::WEB->value => [
+            'index' => \Callmeaf\{{ $model }}\App\Http\Requests\Web\{{ $version }}\{{ $model }}IndexRequest::class,
+            'create' => \Callmeaf\{{ $model }}\App\Http\Requests\Web\{{ $version }}\{{ $model }}CreateRequest::class,
+            'store' => \Callmeaf\{{ $model }}\App\Http\Requests\Web\{{ $version }}\{{ $model }}StoreRequest::class,
+            'show' => \Callmeaf\{{ $model }}\App\Http\Requests\Web\{{ $version }}\{{ $model }}ShowRequest::class,
+            'edit' => \Callmeaf\{{ $model }}\App\Http\Requests\Web\{{ $version }}\{{ $model }}EditRequest::class,
+            'update' => \Callmeaf\{{ $model }}\App\Http\Requests\Web\{{ $version }}\{{ $model }}UpdateRequest::class,
+            'destroy' => \Callmeaf\{{ $model }}\App\Http\Requests\Web\{{ $version }}\{{ $model }}DestroyRequest::class,
+        ],
+        RequestType::ADMIN->value => [
+            'index' => \Callmeaf\{{ $model }}\App\Http\Requests\Admin\{{ $version }}\{{ $model }}IndexRequest::class,
+            'store' => \Callmeaf\{{ $model }}\App\Http\Requests\Admin\{{ $version }}\{{ $model }}StoreRequest::class,
+            'show' => \Callmeaf\{{ $model }}\App\Http\Requests\Admin\{{ $version }}\{{ $model }}ShowRequest::class,
+            'update' => \Callmeaf\{{ $model }}\App\Http\Requests\Admin\{{ $version }}\{{ $model }}UpdateRequest::class,
+            'destroy' => \Callmeaf\{{ $model }}\App\Http\Requests\Admin\{{ $version }}\{{ $model }}DestroyRequest::class,
+        ],
+    ],
+    'controllers' => [
+        RequestType::API->value => [
+            '{{ $controller }}' => \Callmeaf\{{ $model }}\App\Http\Controllers\Api\{{ $version }}\{{ $model }}Controller::class,
+        ],
+        RequestType::WEB->value => [
+            '{{ $controller }}' => \Callmeaf\{{ $model }}\App\Http\Controllers\Web\{{ $version }}\{{ $model }}Controller::class,
+        ],
+        RequestType::ADMIN->value => [
+            '{{ $controller }}' => \Callmeaf\{{ $model }}\App\Http\Controllers\Admin\{{ $version }}\{{ $model }}Controller::class,
+        ],
+    ],
+    'routes' => [
+        RequestType::API->value => [
+            'prefix' => '{{ $route }}',
+            'as' => '{{ $route }}.',
+            'middleware' => [],
+        ],
+        RequestType::WEB->value => [
+            'prefix' => '{{ $route }}',
+            'as' => '{{ $route }}.',
+            'middleware' => [],
+        ],
+        RequestType::ADMIN->value => [
+            'prefix' => '{{ $route }}',
+            'as' => '{{ $route }}.',
+            'middleware' => [],
+        ],
+    ],
+    'enums' => [
+         'status' => \Callmeaf\{{ $model }}\App\Enums\{{ $model }}Status::class,
+         'type' => \Callmeaf\{{ $model }}\App\Enums\{{ $model }}Type::class,
+    ],
+];

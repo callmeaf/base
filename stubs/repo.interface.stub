@@ -1,0 +1,16 @@
+<?php
+
+namespace Callmeaf\{{ $model }}\App\Repo\Contracts;
+
+use Callmeaf\Base\App\Repo\Contracts\BaseRepoInterface;
+use Callmeaf\{{ $model }}\App\Models\{{ $model }};
+use Callmeaf\{{ $model }}\App\Http\Resources\{{ $guard }}\{{ $version }}\{{ $model }}Collection;
+use Callmeaf\{{ $model }}\App\Http\Resources\{{ $guard }}\{{ $version }}\{{ $model }}Resource;
+
+/**
+ * @extends BaseRepoInterface<{{ $model }},{{ $model }}Resource,{{ $model }}Collection>
+ */
+interface {{ $model }}RepoInterface extends BaseRepoInterface
+{
+
+}

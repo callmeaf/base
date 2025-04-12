@@ -1,0 +1,22 @@
+<?php
+
+namespace Callmeaf\{{ $model }}\App\Http\Resources\{{ $guard }}\{{ $version }};
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+
+/**
+ * @extends ResourceCollection<{{ $model }}Resource>
+ */
+class {{ $model }}Collection extends ResourceCollection
+{
+    /**
+     * Transform the resource collection into an array.
+     *
+     * @return array<int|string, {{ $model }}Resource>
+     */
+    public function toArray(Request $request): array
+    {
+        return parent::toArray($request);
+    }
+}

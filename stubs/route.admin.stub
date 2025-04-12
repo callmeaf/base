@@ -1,0 +1,19 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+[
+    $controllers,
+    $prefix,
+    $as,
+    $middleware,
+] = Base::getRouteConfigFromRepo(repo: \Callmeaf\{{ $model }}\App\Repo\Contracts\{{ $model }}RepoInterface::class);
+
+Route::apiResource($prefix, $controllers['{{ $controller }}'])->middleware($middleware);
+// Route::prefix($prefix)->as($as)->middleware($middleware)->controller($controllers['{{ $controller }}'])->group(function () {
+    // Route::get('trashed/list', 'trashed');
+    // Route::prefix('{{{ $routeKeyName }}}')->group(function () {
+        // Route::patch('/restore', 'restore');
+        // Route::delete('/force', 'forceDestroy');
+    // });
+// });

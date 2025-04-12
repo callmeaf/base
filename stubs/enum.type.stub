@@ -1,0 +1,8 @@
+<?php
+
+namespace Callmeaf\{{ $model }}\App\Enums;
+
+enum {{ $model }}Type: string
+{
+
+}
