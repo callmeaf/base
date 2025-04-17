@@ -110,12 +110,15 @@ if (! function_exists('packagePath')) {
     function packagePath(string $package, string $path = ''): string
     {
         $vendorPath = base_path("vendor/callmeaf");
-
-        if(is_dir("$vendorPath/$package")) {
-            return "$vendorPath/$package" . ($path ? "/$path" : '');
+        if ($path) {
+            $package .= "/$path";
         }
 
-        return base_path("packages/$package" . ($path ? "/$path" : ''));
+        if(app(Filesystem::class)->exists("$vendorPath/$package")) {
+            return "$vendorPath/$package";
+        }
+
+        return base_path("packages/$package");
     }
 }
 
