@@ -50,7 +50,7 @@ trait BaseRepoMethods
     {
         if ($builder) {
             $this->builder($builder);
-        } else if (\Base::classUse($this->getModel(),HasSearch::class)) {
+        } else if (\Base::classUse($this->getModel()::class,HasSearch::class)) {
             $this->getQuery()->search();
         }
 
