@@ -39,8 +39,22 @@ class CallmeafRemovePackageCommand extends Command
             return 1;
         }
 
+
         $guards = array_map(fn($item) => $item->value, RequestType::cases());
         $packageService = new CallmeafPackageService(packageName: $package, version: $userSelectedVersion, guards: $guards);
+
+        if($isBasePackage) {
+            if(! $packageService->basePackageVersionExists()) {
+                $this->error("Base with $userSelectedVersion does not exists.");
+                return 1;
+            }
+        } else {
+            if(! $packageService->versionExists()) {
+                $this->error("$package with $userSelectedVersion does not exists");
+                return 1;
+            }
+        }
+
 
         if ($packageService->basePackageVersionExists() && ! $isBasePackage) {
             if ($this->confirm("Do you want remove this version of base package also ? Base ( {$userSelectedVersion} )")) {
@@ -51,6 +65,7 @@ class CallmeafRemovePackageCommand extends Command
         if ($isBasePackage) {
             $packageService->removeBasePackage();
         } else {
+            $this->alert("Removing the $package! ( $userSelectedVersion ) it may take a while, please wait.");
             $packageService->removePackage();
         }
 

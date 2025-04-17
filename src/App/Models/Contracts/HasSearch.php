@@ -1,6 +1,6 @@
 <?php
 
-namespace Callmeaf\Base\Contracts\Model;
+namespace Callmeaf\Base\App\Models\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
 

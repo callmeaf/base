@@ -3,9 +3,8 @@
 namespace Callmeaf\Base\App\Traits\Model;
 
 use Callmeaf\Base\App\Models\Contracts\BaseConfigurable;
-use Callmeaf\Base\Contracts\Model\HasSearch;
+use Callmeaf\Base\App\Models\Contracts\HasSearch;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait BaseModelMethods
 {

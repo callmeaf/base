@@ -66,6 +66,7 @@ class CallmeafPackageService
         $this->lang();
         $this->import();
         $this->export();
+        $this->autoDiscoverPackage();
 
         return $this;
     }
@@ -87,10 +88,10 @@ class CallmeafPackageService
         $route = str($this->packageName)->plural()->snake()->toString();
         $version = str($this->version)->ucfirst()->toString();
         $controller = str($this->packageName)->singular()->snake()->lower()->toString();
-        $pluralModel = str($this->packageName)->headline()->plural()->toString();
+        $studlyModel = str($this->packageName)->plural()->studly()->toString();
         $result = $this->mkfile(path: $this->packageDir(
             append: "config/callmeaf-{$configName}-{$this->version}.php"),
-            contents: str_replace(['{{ $model }}', '{{ $route }}', '{{ $version }}', '{{ $controller }}','{{ $pluralModel }}'], [$this->packageName, $route, $version, $controller,$pluralModel], $this->stub(key: 'config'))
+            contents: str_replace(['{{ $model }}', '{{ $route }}', '{{ $version }}', '{{ $controller }}','{{ $studlyModel }}'], [$this->packageName, $route, $version, $controller,$studlyModel], $this->stub(key: 'config'))
         );
         if (! $result) {
             $this->pushError(message: "Failed to {$this->errorType} config file {$configName}");
@@ -509,10 +510,10 @@ class CallmeafPackageService
                 $this->pushError(message: "Failed to {$this->errorType} import folder {$moduleName}");
             }
 
-            $importName = str($moduleName)->headline()->plural()->toString();
+            $importName = str($moduleName)->studly()->plural()->toString();
             $repo = str($moduleName)->lower()->singular()->toString();
             $result = $this->mkfile(path: $this->packageDir(
-                append: "$importPath/$importName.php",
+                append: "$importPath/{$importName}Import.php",
             ), contents: str_replace(['{{ $model }}','{{ $guard }}','{{ $version }}','{{ $importName }}','{{ $repo }}'], [$moduleName,$guard,$version,$importName,$repo], $this->stub(key: "import.excel")));
             if (! $result) {
                 $this->pushError(message: "Failed to {$this->errorType} import file {$moduleName} {$this->version} {$guard}");
@@ -537,10 +538,10 @@ class CallmeafPackageService
                 $this->pushError(message: "Failed to {$this->errorType} export folder {$moduleName}");
             }
 
-            $exportName = str($moduleName)->headline()->plural()->toString();
+            $exportName = str($moduleName)->studly()->plural()->toString();
             $repo = str($moduleName)->lower()->singular()->toString();
             $result = $this->mkfile(path: $this->packageDir(
-                append: "$exportPath/$exportName.php",
+                append: "$exportPath/{$exportName}Export.php",
             ), contents: str_replace(['{{ $model }}','{{ $guard }}','{{ $version }}','{{ $exportName }}','{{ $repo }}'], [$moduleName,$guard,$version,$exportName,$repo], $this->stub(key: "export.excel")));
             if (! $result) {
                 $this->pushError(message: "Failed to {$this->errorType} export file {$moduleName} {$this->version} {$guard}");
@@ -596,6 +597,75 @@ class CallmeafPackageService
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    public function autoDiscoverPackage(): self
+    {
+        $this->addOrRemovePackageToRootComposerJson();
+        $this->addOrRemovePackageToRootProviders();
+
+        return $this;
+    }
+
+    private function addOrRemovePackageToRootProviders(): bool
+    {
+        $providerPath = base_path('bootstrap/providers.php');
+        $providers = include $providerPath;
+
+        $composerPath = $this->packageDir(append: 'composer.json');
+        $composerJson = $this->files->get($composerPath);
+        $composerJson = json_decode($composerJson,true);
+        $packageProviders = $composerJson['extra']['laravel']['providers'];
+
+        if($this->remove) {
+            $providers = array_diff($providers,$packageProviders);
+        } else {
+            $providers = array_merge($providers,$packageProviders);
+        }
+
+        $content = "<?php\n\nreturn [\n";
+        foreach ($providers as $provider) {
+            $content .= "   " . $provider . "::class,\n";
+        }
+        $content .= "];\n";
+
+        $result = $this->files->put($providerPath,$content);
+        if(! $result) {
+            $this->pushError("Failed to update providers.php");
+        }
+
+        return $result;
+    }
+
+    private function addOrRemovePackageToRootComposerJson(): bool
+    {
+        $composerPath = base_path('composer.json');
+        $composerJson = $this->files->get($composerPath);
+        $composerJson = json_decode($composerJson,true);
+        $packageName = str($this->packageName)->studly()->toString();
+        $packageDir = str($this->packageName)->snake()->lower()->toString();
+
+        $psr4 = $composerJson['autoload']['psr-4'];
+        $psr4Key = "Callmeaf\\$packageName\\";
+
+        if($this->remove) {
+            if(isset($psr4[$psr4Key])) {
+                unset($psr4[$psr4Key]);
+            }
+        } else {
+            $psr4[$psr4Key] = "packages/$packageDir/src";
+        }
+
+        $composerJson['autoload']['psr-4'] = $psr4;
+
+        $result = $this->files->put($composerPath,json_encode($composerJson,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        if($result) {
+            exec('composer dump-autoload');
+        } else {
+            $this->pushError(message: "Failed to update composer json.");
+        }
+
+        return $result;
     }
 
     private function ensurePackageMade(): void

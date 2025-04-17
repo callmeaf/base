@@ -132,24 +132,24 @@ return [
     ],
      'exports' => [
         RequestType::API->value => [
-            'excel' => \Callmeaf\{{ $model }}\App\Exports\Api\V1\{{ $pluralModel }}Export::class,
+            'excel' => \Callmeaf\{{ $model }}\App\Exports\Api\V1\{{ $studlyModel }}Export::class,
         ],
         RequestType::WEB->value => [
-            'excel' => \Callmeaf\{{ $model }}\App\Exports\Web\V1\{{ $pluralModel }}Export::class,
+            'excel' => \Callmeaf\{{ $model }}\App\Exports\Web\V1\{{ $studlyModel }}Export::class,
         ],
         RequestType::ADMIN->value => [
-            'excel' => \Callmeaf\{{ $model }}\App\Exports\Admin\V1\{{ $pluralModel }}Export::class,
+            'excel' => \Callmeaf\{{ $model }}\App\Exports\Admin\V1\{{ $studlyModel }}Export::class,
         ],
      ],
      'imports' => [
          RequestType::API->value => [
-             'excel' => \Callmeaf\{{ $model }}\App\Imports\Api\V1\{{ $pluralModel }}Import::class,
+             'excel' => \Callmeaf\{{ $model }}\App\Imports\Api\V1\{{ $studlyModel }}Import::class,
          ],
          RequestType::WEB->value => [
-             'excel' => \Callmeaf\{{ $model }}\App\Imports\Web\V1\{{ $pluralModel }}Import::class,
+             'excel' => \Callmeaf\{{ $model }}\App\Imports\Web\V1\{{ $studlyModel }}Import::class,
          ],
          RequestType::ADMIN->value => [
-             'excel' => \Callmeaf\{{ $model }}\App\Imports\Admin\V1\{{ $pluralModel }}Import::class,
+             'excel' => \Callmeaf\{{ $model }}\App\Imports\Admin\V1\{{ $studlyModel }}Import::class,
          ],
      ],
 ];

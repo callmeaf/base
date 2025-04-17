@@ -14,12 +14,14 @@ use Callmeaf\Base\Contracts\ServiceProvider\HasMigration;
 use Callmeaf\Base\Contracts\ServiceProvider\HasRepo;
 use Callmeaf\Base\Contracts\ServiceProvider\HasRoute;
 use Callmeaf\Base\Contracts\ServiceProvider\HasView;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Application;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 abstract class CallmeafServiceProvider extends ServiceProvider
 {
@@ -258,5 +260,4 @@ abstract class CallmeafServiceProvider extends ServiceProvider
     {
         $this->CONFIG_STATUS = $value;
     }
-
 }

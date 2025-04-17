@@ -47,8 +47,6 @@ if (!function_exists('requestVersion')) {
                 }
             }
 
-            logger('$version');
-            logger($version);
             if (! in_array($version, allExistsVersion())) {
                 throw new \Error("Version of {$version} for base does not exists");
             }
@@ -109,6 +107,10 @@ if (! function_exists('isPostmanRequest')) {
 if (! function_exists('packagePath')) {
     function packagePath(string $package, string $path = ''): string
     {
+        if(empty($package)) {
+            return base_path('packages');
+        }
+
         $vendorPath = base_path("vendor/callmeaf");
         if ($path) {
             $package .= "/$path";

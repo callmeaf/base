@@ -2,8 +2,7 @@
 
 namespace Callmeaf\Base\App\Traits\Repo;
 
-use Callmeaf\Base\App\Traits\Model\HasSlug;
-use Callmeaf\Base\Contracts\Model\HasSearch;
+use Callmeaf\Base\App\Models\Contracts\HasSearch;
 
 trait BaseRepoMethods
 {

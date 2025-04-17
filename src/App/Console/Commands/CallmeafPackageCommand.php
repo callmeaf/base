@@ -51,7 +51,7 @@ class CallmeafPackageCommand extends Command
         } else {
             $options = $userSelectedOptions;
         }
-        $options = ['serviceProvider', 'composer', 'config', ...$options];
+        $options = ['serviceProvider', 'composer', 'config', ...$options, 'autoDiscoverPackage'];
 
         $guards = ['all', ...array_map(fn($item) => $item->value, RequestType::cases())];
         $userSelectedGuards = $this->choice("Which guard you want use in your app for {$package} package", $guards, default: 0, multiple: true);
@@ -83,6 +83,9 @@ class CallmeafPackageCommand extends Command
         $packageService->makePackage();
 
         foreach ($options as $option) {
+            if($option === 'autoDiscoverPackage') {
+                $this->alert("Preparing the $package! ( $userSelectedVersion ) it may take a while, please wait.");
+            }
             $packageService->{$option}();
         }
 
@@ -93,6 +96,8 @@ class CallmeafPackageCommand extends Command
         if (! empty($errors)) {
             return 1;
         }
+
+
 
         $this->info("Package successful created. ( $package ) ( $userSelectedVersion )");
         return 0;
