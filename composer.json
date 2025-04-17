@@ -17,6 +17,9 @@
             "email": "alikhoshkar2000@gmail.com"
         }
     ],
+    "require": {
+        "spatie/laravel-sluggable": "^3.7"
+    },
     "minimum-stability": "dev",
     "extra": {
         "laravel": {

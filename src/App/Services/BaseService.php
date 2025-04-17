@@ -321,4 +321,9 @@ class BaseService
     {
         return request()->query($this->config('trashed_key')) == 'true';
     }
+
+    public function classUse(string $className,string $targetName): bool
+    {
+        return in_array($targetName,class_uses($className));
+    }
 }

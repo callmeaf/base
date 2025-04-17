@@ -2,6 +2,7 @@
 
 namespace Callmeaf\Base\App\Traits\Repo;
 
+use Callmeaf\Base\App\Traits\Model\HasSlug;
 use Callmeaf\Base\Contracts\Model\HasSearch;
 
 trait BaseRepoMethods
@@ -118,6 +119,4 @@ trait BaseRepoMethods
     {
         return $this->trashed()->getQuery()->where(column: $this->modelKeyName(), operator: $id)->forceDelete();
     }
-
-
 }

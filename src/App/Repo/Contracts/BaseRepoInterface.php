@@ -84,5 +84,4 @@ interface BaseRepoInterface extends CoreRepoInterface
      * @return int
      */
     public function forceDeleteQuietly(mixed $id): int;
-
 }
