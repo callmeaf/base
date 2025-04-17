@@ -2,7 +2,7 @@
 
 namespace Callmeaf\Base\App\Traits\Repo;
 
-use Callmeaf\Base\App\Models\Contracts\HasSearch;
+use Callmeaf\Base\App\Traits\Model\HasSearch;
 
 trait BaseRepoMethods
 {
@@ -50,7 +50,7 @@ trait BaseRepoMethods
     {
         if ($builder) {
             $this->builder($builder);
-        } else if ($this->getModel() instanceof HasSearch) {
+        } else if (\Base::classUse($this->getModel(),HasSearch::class)) {
             $this->getQuery()->search();
         }
 

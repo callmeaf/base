@@ -3,8 +3,6 @@
 namespace Callmeaf\Base\App\Traits\Model;
 
 use Callmeaf\Base\App\Models\Contracts\BaseConfigurable;
-use Callmeaf\Base\App\Models\Contracts\HasSearch;
-use Illuminate\Database\Eloquent\Builder;
 
 trait BaseModelMethods
 {
@@ -23,30 +21,5 @@ trait BaseModelMethods
         }
 
         return $primaryKey;
-    }
-
-    public function handleSearch(Builder $query): void
-    {
-        if (! ($this instanceof HasSearch)) {
-            return;
-        }
-
-        [, $params] = $this->searchParams();
-        $request = request();
-
-        $query->where(function (Builder $builder) use ($params, $request) {
-            foreach ($params as $param => $column) {
-                $value = trim($request->query($param));
-                if (! $value) {
-                    continue;
-                }
-
-                match (true) {
-                    str($param)->contains('_from') => $builder->whereDate($column, ">=", $value),
-                    str($param)->contains('_to') => $builder->whereDate($column, '<=', $value),
-                    default => $builder->where($column, $value)
-                };
-            }
-        });
     }
 }
