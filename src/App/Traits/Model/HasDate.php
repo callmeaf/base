@@ -10,7 +10,7 @@ trait HasDate
     {
         return match (app()->currentLocale()) {
             'fa' => verta($this->created_at)->format($format->value),
-            default => $this->created_at,
+            default => $this->created_at?->format($format->value),
         };
     }
 
@@ -18,7 +18,7 @@ trait HasDate
     {
         return match (app()->currentLocale()) {
             'fa' => verta($this->updated_at)->format($format->value),
-            default => $this->updated_at,
+            default => $this->updated_at?->format($format->value),
         };
     }
 
@@ -26,7 +26,7 @@ trait HasDate
     {
         return match (app()->currentLocale()) {
             'fa' => verta($this->deleted_at)->format($format->value),
-            default => $this->deleted_at,
+            default => $this->deleted_at?->format($format->value),
         };
     }
 }
