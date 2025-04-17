@@ -484,7 +484,7 @@ class CallmeafPackageService
             foreach ($this->guards as $guard) {
                 $result = $this->mkfile(path: $this->packageDir(
                     append: "lang/{$locale}/enums.php"),
-                    contents: str_replace([], [], $this->stub(key: "lang.enum"))
+                    contents: str_replace(['{{ $model }}'], [$modelName], $this->stub(key: "lang.enum"))
                 );
                 if (! $result) {
                     $this->pushError(message: "Failed to {$this->errorType} lang file {$this->packageName} {$this->version} {$guard} {$locale}");
