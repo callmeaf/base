@@ -17,7 +17,7 @@ class CallmeafPackageService
     private readonly Filesystem $files;
     private array $errors = [];
 
-    public function __construct(private readonly string $packageName, private readonly string $version, private readonly array $guards)
+    public function __construct(private readonly string $packageName, private readonly string $version, private readonly array $guards,private readonly bool $isPivot = false,private readonly bool $hasTrashed = true)
     {
         $this->files = app(Filesystem::class);
     }
@@ -59,14 +59,21 @@ class CallmeafPackageService
         $this->config();
         $this->repo();
         $this->resource();
-        $this->event();
-        $this->request();
-        $this->controller();
-        $this->route();
         $this->lang();
-        $this->import();
-        $this->export();
-        $this->autoDiscoverPackage();
+
+        if(! $this->isPivot) {
+            $this->event();
+            $this->request();
+            $this->controller();
+            $this->route();
+            $this->import();
+            $this->export();
+        }
+
+        if($this->canRemoveFullDirPackage()) {
+            $this->autoDiscoverPackage();
+            $this->mkdir(path: $this->packageDir(),force: true);
+        }
 
         return $this;
     }
@@ -91,7 +98,7 @@ class CallmeafPackageService
         $studlyModel = str($this->packageName)->plural()->studly()->toString();
         $result = $this->mkfile(path: $this->packageDir(
             append: "config/callmeaf-{$configName}-{$this->version}.php"),
-            contents: str_replace(['{{ $model }}', '{{ $route }}', '{{ $version }}', '{{ $controller }}','{{ $studlyModel }}'], [$this->packageName, $route, $version, $controller,$studlyModel], $this->stub(key: 'config'))
+            contents: str_replace(['{{ $model }}', '{{ $route }}', '{{ $version }}', '{{ $controller }}','{{ $studlyModel }}'], [$this->packageName, $route, $version, $controller,$studlyModel], $this->stub(key: $this->isPivot ? 'config.pivot' : 'config'))
         );
         if (! $result) {
             $this->pushError(message: "Failed to {$this->errorType} config file {$configName}");
@@ -118,7 +125,7 @@ class CallmeafPackageService
 
         $result = $this->mkfile(path: $this->packageDir(
             append: "src/App/Models/$modelName.php"),
-            contents: str_replace(['{{ $model }}', '{{ $config }}'], [$modelName, $config], $this->stub(key: 'model'))
+            contents: str_replace(['{{ $model }}', '{{ $config }}'], [$modelName, $config], $this->stub(key: $this->isPivot ? 'model.pivot' : 'model'))
         );
         if (! $result) {
             $this->pushError(message: "Failed to {$this->errorType} model file {$modelName}");
@@ -217,17 +224,19 @@ class CallmeafPackageService
         $version = str($this->version)->ucfirst()->toString();
         $modelName = $this->packageName;
 
-        $singularVar = str($modelName)->lower()->singular();
-        $pluralVar = str($modelName)->lower()->plural();
+        $singularModelName = str($modelName)->lower()->singular();
+        $pluralModelName = str($modelName)->lower()->plural();
         $lifeCycles = [
-            'Indexed' => $pluralVar,
-            'Created' => $singularVar,
-            'Showed' => $singularVar,
-            'Updated' => $singularVar,
-            'Deleted' => $singularVar,
-            'Trashed' => $pluralVar,
-            'Restored' => $singularVar,
-            'ForceDeleted' => $singularVar,
+            'Indexed' => $pluralModelName,
+            'Created' => $singularModelName,
+            'Showed' => $singularModelName,
+            'Updated' => $singularModelName,
+            'Deleted' => $singularModelName,
+            ...($this->hasTrashed ? [
+                'Trashed' => $pluralModelName,
+                'Restored' => $singularModelName,
+                'ForceDeleted' => $singularModelName,
+            ] : [])
         ];
 
         foreach ($this->guards as $guard) {
@@ -251,7 +260,7 @@ class CallmeafPackageService
             }
 
             foreach ($lifeCycles as $lifeCycle => $var) {
-                $stubKey = $var === $singularVar ? 'event.model' : 'event.collection';
+                $stubKey = $var === $singularModelName ? 'event.model' : 'event.collection';
                 $result = $this->mkfile(path: $this->packageDir(
                     append: "src/App/Events/{$guard}/{$version}/{$modelName}{$lifeCycle}.php"),
                     contents: str_replace(['{{ $model }}', '{{ $guard }}', '{{ $version }}', '{{ $var }}', '{{ $lifeCycle }}'], [$modelName, $guard, $version, $var, $lifeCycle], $this->stub(key: $stubKey))
@@ -276,9 +285,11 @@ class CallmeafPackageService
                 'Show',
                 'Update',
                 'Destroy',
-                'Trashed',
-                'Restore',
-                'ForceDestroy'
+                ...($this->hasTrashed ? [
+                    'Trashed',
+                    'Restore',
+                    'ForceDestroy'
+                ] : [])
             ],
             RequestType::WEB->value => [
                 'Index',
@@ -288,9 +299,11 @@ class CallmeafPackageService
                 'Edit',
                 'Update',
                 'Destroy',
-                'Trashed',
-                'Restore',
-                'ForceDestroy'
+                ...($this->hasTrashed ? [
+                    'Trashed',
+                    'Restore',
+                    'ForceDestroy'
+                ] : [])
             ],
             RequestType::ADMIN->value => [
                 'Index',
@@ -298,9 +311,11 @@ class CallmeafPackageService
                 'Show',
                 'Update',
                 'Destroy',
-                'Trashed',
-                'Restore',
-                'ForceDestroy'
+                ...($this->hasTrashed ? [
+                    'Trashed',
+                    'Restore',
+                    'ForceDestroy'
+                ] : [])
             ],
         ];
 
@@ -566,7 +581,7 @@ class CallmeafPackageService
 
         $result = $this->mkfile(path: $this->packageDir(
             append: "src/Callmeaf{$modelName}ServiceProvider.php"),
-            contents: str_replace(['{{ $model }}', '{{ $serviceKey }}'], [$modelName, $serviceKey], $this->stub(key: "service_provider"))
+            contents: str_replace(['{{ $model }}', '{{ $serviceKey }}'], [$modelName, $serviceKey], $this->stub(key: $this->isPivot ? 'service_provider.pivot' : 'service_provider'))
         );
         if (! $result) {
             $this->pushError(message: "Failed to {$this->errorType} service provider file {$this->packageName}");
@@ -601,8 +616,10 @@ class CallmeafPackageService
 
     public function autoDiscoverPackage(): self
     {
-        $this->addOrRemovePackageToRootComposerJson();
-        $this->addOrRemovePackageToRootProviders();
+        if($this->needToRunComposerAutoload()) {
+            $this->addOrRemovePackageToRootComposerJson();
+            $this->addOrRemovePackageToRootProviders();
+        }
 
         return $this;
     }
@@ -668,6 +685,11 @@ class CallmeafPackageService
         return $result;
     }
 
+    private function removePackageDir(): void
+    {
+
+    }
+
     private function ensurePackageMade(): void
     {
         if (! $this->remove) {
@@ -694,8 +716,12 @@ class CallmeafPackageService
     {
         if ($this->checkFileExists(path: $path)) {
             if ($this->remove) {
-                if (str($path)->endsWith(strtoupper($this->version))) {
-                    return $this->files->deleteDirectory(directory: $path);
+                if($force) {
+                    $this->files->deleteDirectory(directory: $path);
+                } else {
+                    if (str($path)->endsWith(strtoupper($this->version))) {
+                        return $this->files->deleteDirectory(directory: $path);
+                    }
                 }
             }
             return true;
@@ -724,5 +750,24 @@ class CallmeafPackageService
     private function checkFileExists(string $path): bool
     {
         return $this->files->exists(path: $path);
+    }
+
+    private function canRemoveFullDirPackage(): bool
+    {
+        $snakeLowerModelName = str($this->packageName)->snake()->lower()->toString();
+        $allExistsVersionCount = count(allExistsVersion(package: $snakeLowerModelName));
+
+        return $allExistsVersionCount === 0;
+    }
+
+    private function needToRunComposerAutoload(): bool
+    {
+        if($this->remove) {
+            return $this->canRemoveFullDirPackage();
+        }
+        $snakeLowerModelName = str($this->packageName)->snake()->lower()->toString();
+        $allExistsVersionCount = count(allExistsVersion(package: $snakeLowerModelName));
+
+        return $allExistsVersionCount === 1;
     }
 }

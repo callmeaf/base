@@ -14,7 +14,7 @@ class CallmeafPackageCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'callmeaf:package {package : which package name should be created}';
+    protected $signature = 'callmeaf:package {package : which package name should be created} {--pivot} {--trashed=true}';
 
     /**
      * The console command description.
@@ -30,7 +30,8 @@ class CallmeafPackageCommand extends Command
     public function handle(): int
     {
         $package = $this->argument(key: 'package');
-
+        $isPivot = $this->hasOption('pivot');
+        $hasTrashed = (bool) $this->option('trashed');
         if ($package === 'base') {
             $this->error('Can not use base name as package, try another name.');
             return 1;
@@ -43,7 +44,7 @@ class CallmeafPackageCommand extends Command
             return 1;
         }
 
-        $options = ['all', 'model', 'repo', 'resource', 'event', 'request', 'controller', 'route', 'lang', 'migration', 'enum','import','export'];
+        $options = $isPivot ? ['all','model','repo','resource','lang','migration','enum'] : ['all', 'model', 'repo', 'resource', 'event', 'request', 'controller', 'route', 'lang', 'migration', 'enum','import','export'];
         $userSelectedOptions = $this->choice("Which options you want to create for {$package} package", $options, default: 0, multiple: true);
 
         if (! empty(array_filter($userSelectedOptions, fn($item) => $item === 'all'))) {
@@ -62,7 +63,7 @@ class CallmeafPackageCommand extends Command
             $guards = $userSelectedGuards;
         }
 
-        $packageService = new CallmeafPackageService(packageName: $package, version: $userSelectedVersion, guards: $guards);
+        $packageService = new CallmeafPackageService(packageName: $package, version: $userSelectedVersion, guards: $guards,isPivot: $isPivot,hasTrashed: $hasTrashed);
         if (! $packageService->basePackageVersionExists()) {
             $this->warn("For new version {$package} {$userSelectedVersion} you must first create base config of this version");
             if ($this->confirm("create new version of base config ?", true)) {

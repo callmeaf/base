@@ -1,0 +1,25 @@
+<?php
+
+namespace Callmeaf\{{ $model }};
+
+use Callmeaf\Base\CallmeafServiceProvider;
+use Callmeaf\Base\Contracts\ServiceProvider\HasConfig;
+use Callmeaf\Base\Contracts\ServiceProvider\HasEvent;
+use Callmeaf\Base\Contracts\ServiceProvider\HasLang;
+use Callmeaf\Base\Contracts\ServiceProvider\HasMigration;
+use Callmeaf\Base\Contracts\ServiceProvider\HasRepo;
+use Callmeaf\Base\Contracts\ServiceProvider\HasRoute;
+use Callmeaf\{{ $model }}\App\Repo\Contracts\{{ $model }}RepoInterface;
+
+class Callmeaf{{ $model }}ServiceProvider extends CallmeafServiceProvider implements HasRepo, HasMigration, HasConfig, HasLang
+{
+    protected function serviceKey(): string
+    {
+        return '{{ $serviceKey }}';
+    }
+
+    public function repo(): string
+    {
+        return {{ $model }}RepoInterface::class;
+    }
+}

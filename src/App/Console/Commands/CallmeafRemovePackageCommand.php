@@ -14,7 +14,7 @@ class CallmeafRemovePackageCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'callmeaf:remove-package {package : which package name should be removed}';
+    protected $signature = 'callmeaf:remove-package {package : which package name should be removed} {--pivot}';
 
     /**
      * The console command description.
@@ -31,6 +31,7 @@ class CallmeafRemovePackageCommand extends Command
     {
         $package = $this->argument(key: 'package');
         $isBasePackage = str($package)->lower()->toString() === 'base';
+        $isPivot = $this->hasOption('pivot');
 
         $userSelectedVersion = $this->ask("Which version do you prefer to remove for {$package} package", 'v1');
 
@@ -41,7 +42,7 @@ class CallmeafRemovePackageCommand extends Command
 
 
         $guards = array_map(fn($item) => $item->value, RequestType::cases());
-        $packageService = new CallmeafPackageService(packageName: $package, version: $userSelectedVersion, guards: $guards);
+        $packageService = new CallmeafPackageService(packageName: $package, version: $userSelectedVersion, guards: $guards,isPivot: $isPivot);
 
         if($isBasePackage) {
             if(! $packageService->basePackageVersionExists()) {

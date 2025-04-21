@@ -1,0 +1,26 @@
+<?php
+
+use Callmeaf\Base\App\Enums\RequestType;
+
+return [
+    'model' => \Callmeaf\{{ $model }}\App\Models\{{ $model }}::class,
+    'repo' => \Callmeaf\{{ $model }}\App\Repo\{{ $version }}\{{ $model }}Repo::class,
+    'resources' => [
+        RequestType::API->value => [
+            'resource' => \Callmeaf\{{ $model }}\App\Http\Resources\Api\{{ $version }}\{{ $model }}Resource::class,
+            'resource_collection' => \Callmeaf\{{ $model }}\App\Http\Resources\Api\{{ $version }}\{{ $model }}Collection::class,
+        ],
+        RequestType::WEB->value => [
+            'resource' => \Callmeaf\{{ $model }}\App\Http\Resources\Web\{{ $version }}\{{ $model }}Resource::class,
+            'resource_collection' => \Callmeaf\{{ $model }}\App\Http\Resources\Web\{{ $version }}\{{ $model }}Collection::class,
+        ],
+        RequestType::ADMIN->value => [
+            'resource' => \Callmeaf\{{ $model }}\App\Http\Resources\Admin\{{ $version }}\{{ $model }}Resource::class,
+            'resource_collection' => \Callmeaf\{{ $model }}\App\Http\Resources\Admin\{{ $version }}\{{ $model }}Collection::class,
+        ],
+    ],
+    'enums' => [
+         'status' => \Callmeaf\{{ $model }}\App\Enums\{{ $model }}Status::class,
+         'type' => \Callmeaf\{{ $model }}\App\Enums\{{ $model }}Type::class,
+    ],
+];

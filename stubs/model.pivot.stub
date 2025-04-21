@@ -1,0 +1,24 @@
+<?php
+
+namespace Callmeaf\{{ $model }}\App\Models;
+
+use Callmeaf\Base\App\Models\BasePivotModel;
+
+class {{ $model }} extends BasePivotModel
+{
+    protected $fillable = [
+        //
+    ];
+
+    public static function configKey(): string
+    {
+        return 'callmeaf-{{ $config }}';
+    }
+
+    protected function casts(): array
+    {
+        return [
+            ...(self::config()['enums'] ?? []),
+        ];
+    }
+}
