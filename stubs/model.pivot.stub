@@ -6,6 +6,8 @@ use Callmeaf\Base\App\Models\BasePivotModel;
 
 class {{ $model }} extends BasePivotModel
 {
+    protected $table = '{{ $table }}';
+
     protected $fillable = [
         //
     ];

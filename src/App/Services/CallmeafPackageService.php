@@ -442,7 +442,11 @@ class CallmeafPackageService
             $this->pushError(message: "Failed to {$this->errorType} database/migrations folder {$this->packageName}");
         }
 
-        $tableName = str($this->packageName)->snake()->plural()->lower()->toString();
+        if($this->isPivot) {
+            $tableName = str($this->packageName)->snake()->singular()->lower()->toString();
+        } else {
+            $tableName = str($this->packageName)->snake()->plural()->lower()->toString();
+        }
 
         foreach ($this->files->files($this->packageDir(append: "database/migrations")) as $file) {
             if (str($file->getFilename())->contains($tableName)) {
@@ -477,11 +481,12 @@ class CallmeafPackageService
         ];
 
         $modelName = $this->packageName;
+        $table = str($this->packageName)->singular()->snake()->lower()->toString();
         foreach ($enumsStub as $enumStub) {
             $enumName = $modelName . str($enumStub)->headline()->toString();
             $result = $this->mkfile(path: $this->packageDir(
                 append: "src/App/Enums/$enumName.php"),
-                contents: str_replace(['{{ $model }}'], [$modelName], $this->stub(key: "enum.{$enumStub}"))
+                contents: str_replace(['{{ $model }}','{{ $table }}'], [$modelName,$table], $this->stub(key: "enum.{$enumStub}"))
             );
             if (! $result) {
                 $this->pushError(message: "Failed to {$this->errorType} enum file {$this->packageName} {$enumName}");
