@@ -354,7 +354,7 @@ class CallmeafPackageService
 
         $version = str($this->version)->ucfirst()->toString();
         $modelName = $this->packageName;
-        $singularCamelVar = str($modelName)->singular()->camel()->lower()->toString();
+        $singularCamelVar = str($modelName)->singular()->camel()->toString();
 
         foreach ($this->guards as $guard) {
             $lowerGuard = $guard;
