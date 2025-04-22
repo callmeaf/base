@@ -30,7 +30,7 @@ class CallmeafPackageCommand extends Command
     public function handle(): int
     {
         $package = $this->argument(key: 'package');
-        $isPivot = $this->hasOption('pivot');
+        $isPivot = (bool) $this->option('pivot');
         $hasTrashed = (bool) $this->option('trashed');
         if ($package === 'base') {
             $this->error('Can not use base name as package, try another name.');
