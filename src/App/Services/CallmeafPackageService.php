@@ -354,7 +354,7 @@ class CallmeafPackageService
 
         $version = str($this->version)->ucfirst()->toString();
         $modelName = $this->packageName;
-        $singularVar = str($modelName)->lower()->singular()->camel()->toString();
+        $singularCamelVar = str($modelName)->singular()->camel()->lower()->toString();
 
         foreach ($this->guards as $guard) {
             $lowerGuard = $guard;
@@ -370,7 +370,7 @@ class CallmeafPackageService
 
             $result = $this->mkfile(path: $this->packageDir(
                 append: "src/App/Http/Controllers/{$guard}/{$version}/{$modelName}Controller.php"),
-                contents: str_replace(['{{ $model }}', '{{ $guard }}', '{{ $version }}', '{{ $var }}'], [$modelName, $guard, $version, $singularVar], $this->stub(key: "controller.{$lowerGuard}"))
+                contents: str_replace(['{{ $model }}', '{{ $guard }}', '{{ $version }}', '{{ $var }}'], [$modelName, $guard, $version, $singularCamelVar], $this->stub(key: "controller.{$lowerGuard}"))
             );
             if (! $result) {
                 $this->pushError(message: "Failed to {$this->errorType} controller file {$guard} {$version}");
