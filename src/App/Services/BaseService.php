@@ -198,20 +198,7 @@ class BaseService
     public function enums(?string $package = null): array
     {
         return once(function () use ($package) {
-            $allConfig = [];
-
-            $files = app(Filesystem::class);
-
-            if ($package) {
-                $allConfig[$package] = $this->getConfigFromPackageName(packageName: $package);
-            } else {
-                foreach ($files->directories(base_path('packages')) as $directory) {
-                    $packageName = str($directory)->afterLast('\\')->snake('-')->toString();
-                    $allConfig[$packageName] = $this->getConfigFromPackageName(packageName: $packageName);
-                }
-            }
-
-            $allConfig = array_filter($allConfig);
+            $allConfig = $this->getAllPackagesConfig();
             $enumsConfig = [];
             foreach ($allConfig as $packageName => $config) {
                 $enumsConfig[$packageName] = $config['enums'] ?? [];
@@ -325,5 +312,28 @@ class BaseService
     public function classUse(string $className,string $targetName): bool
     {
         return in_array($targetName,class_uses($className));
+    }
+
+    public function getAllPackagesConfig(): array
+    {
+        $files = app(Filesystem::class);
+
+        $paths = [
+            packagePath(''),
+            packagePath('',getVendorPath: true),
+        ];
+
+        $allConfig = [];
+
+        foreach ($paths as $path) {
+            if($files->isDirectory($path)) {
+                foreach ($files->directories($path) as $directory) {
+                    $packageName = str($directory)->afterLast('\\')->snake('-')->toString();
+                    $allConfig[$packageName] = $this->getConfigFromPackageName(packageName: $packageName);
+                }
+            }
+        }
+
+        return array_filter($allConfig);
     }
 }
