@@ -13,8 +13,8 @@ Route::resource($prefix, $controllers['{{ $controller }}'])->middleware($middlew
 // Route::prefix($prefix)->as($as)->middleware($middleware)->controller($controllers['{{ $controller }}'])->group(function () {
     // Route::get('trashed/list', 'trashed');
     // Route::prefix('{{{ $routeKeyName }}}')->group(function () {
-        // Route::patch('/status', 'status');
-        // Route::patch('/type', 'type');
+        // Route::patch('/status', 'statusUpdate');
+        // Route::patch('/type', 'typeUpdate');
         // Route::patch('/restore', 'restore');
         // Route::delete('/force', 'forceDestroy');
     // });
