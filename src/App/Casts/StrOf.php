@@ -21,7 +21,10 @@ class StrOf implements CastsInboundAttributes
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
         $value = str($value);
-        foreach (explode(',',$this->methods) as $method) {
+
+        $methods = explode(',',$this->methods);
+        $methods = array_filter($methods);
+        foreach ($methods as $method) {
             $value = $value->$method();
         }
         return $value->toString();
