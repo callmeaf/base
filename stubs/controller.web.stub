@@ -69,6 +69,16 @@ class {{ $model }}Controller extends {{ $guard }}Controller implements HasMiddle
         return $this->{{ $var }}Repo->update(id: $id, data: $this->request->validated());
     }
 
+    public function statusUpdate(string $id)
+    {
+        return $this->{{ $var }}Repo->update(id: $id, data: $this->request->validated());
+    }
+
+    public function typeUpdate(string $id)
+    {
+        return $this->{{ $var }}Repo->update(id: $id, data: $this->request->validated());
+    }
+
     /**
      * Remove the specified resource from storage.
      */

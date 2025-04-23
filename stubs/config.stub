@@ -37,6 +37,12 @@ return [
             \Callmeaf\{{ $model }}\App\Events\Api\{{ $version }}\{{ $model }}Deleted::class => [
                 // listeners
             ],
+            \Callmeaf\{{ $model }}\App\Events\Api\{{ $version }}\{{ $model }}StatusUpdated::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Api\{{ $version }}\{{ $model }}TypeUpdated::class => [
+                // listeners
+            ],
         ],
         RequestType::WEB->value => [
             \Callmeaf\{{ $model }}\App\Events\Web\{{ $version }}\{{ $model }}Indexed::class => [
@@ -52,6 +58,12 @@ return [
                 // listeners
             ],
             \Callmeaf\{{ $model }}\App\Events\Web\{{ $version }}\{{ $model }}Deleted::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Web\{{ $version }}\{{ $model }}StatusUpdated::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Web\{{ $version }}\{{ $model }}TypeUpdated::class => [
                 // listeners
             ],
         ],
@@ -71,6 +83,12 @@ return [
             \Callmeaf\{{ $model }}\App\Events\Admin\{{ $version }}\{{ $model }}Deleted::class => [
                 // listeners
             ],
+            \Callmeaf\{{ $model }}\App\Events\Admin\{{ $version }}\{{ $model }}StatusUpdated::class => [
+                // listeners
+            ],
+            \Callmeaf\{{ $model }}\App\Events\Admin\{{ $version }}\{{ $model }}TypeUpdated::class => [
+                // listeners
+            ],
         ],
     ],
     'requests' => [
@@ -80,6 +98,8 @@ return [
             'show' => \Callmeaf\{{ $model }}\App\Http\Requests\Api\{{ $version }}\{{ $model }}ShowRequest::class,
             'update' => \Callmeaf\{{ $model }}\App\Http\Requests\Api\{{ $version }}\{{ $model }}UpdateRequest::class,
             'destroy' => \Callmeaf\{{ $model }}\App\Http\Requests\Api\{{ $version }}\{{ $model }}DestroyRequest::class,
+            'statusUpdate' => \Callmeaf\{{ $model }}\App\Http\Requests\Api\{{ $version }}\{{ $model }}StatusUpdateRequest::class,
+            'typeUpdate' => \Callmeaf\{{ $model }}\App\Http\Requests\Api\{{ $version }}\{{ $model }}TypeUpdateRequest::class,
         ],
         RequestType::WEB->value => [
             'index' => \Callmeaf\{{ $model }}\App\Http\Requests\Web\{{ $version }}\{{ $model }}IndexRequest::class,
@@ -89,6 +109,8 @@ return [
             'edit' => \Callmeaf\{{ $model }}\App\Http\Requests\Web\{{ $version }}\{{ $model }}EditRequest::class,
             'update' => \Callmeaf\{{ $model }}\App\Http\Requests\Web\{{ $version }}\{{ $model }}UpdateRequest::class,
             'destroy' => \Callmeaf\{{ $model }}\App\Http\Requests\Web\{{ $version }}\{{ $model }}DestroyRequest::class,
+            'statusUpdate' => \Callmeaf\{{ $model }}\App\Http\Requests\Web\{{ $version }}\{{ $model }}StatusUpdateRequest::class,
+            'typeUpdate' => \Callmeaf\{{ $model }}\App\Http\Requests\Web\{{ $version }}\{{ $model }}TypeUpdateRequest::class,
         ],
         RequestType::ADMIN->value => [
             'index' => \Callmeaf\{{ $model }}\App\Http\Requests\Admin\{{ $version }}\{{ $model }}IndexRequest::class,
@@ -96,6 +118,8 @@ return [
             'show' => \Callmeaf\{{ $model }}\App\Http\Requests\Admin\{{ $version }}\{{ $model }}ShowRequest::class,
             'update' => \Callmeaf\{{ $model }}\App\Http\Requests\Admin\{{ $version }}\{{ $model }}UpdateRequest::class,
             'destroy' => \Callmeaf\{{ $model }}\App\Http\Requests\Admin\{{ $version }}\{{ $model }}DestroyRequest::class,
+            'statusUpdate' => \Callmeaf\{{ $model }}\App\Http\Requests\Admin\{{ $version }}\{{ $model }}StatusUpdateRequest::class,
+            'typeUpdate' => \Callmeaf\{{ $model }}\App\Http\Requests\Admin\{{ $version }}\{{ $model }}TypeUpdateRequest::class,
         ],
     ],
     'controllers' => [

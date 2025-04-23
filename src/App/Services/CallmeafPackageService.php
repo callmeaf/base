@@ -232,6 +232,8 @@ class CallmeafPackageService
             'Showed' => $singularModelName,
             'Updated' => $singularModelName,
             'Deleted' => $singularModelName,
+            "StatusUpdated" => $singularModelName,
+            'TypeUpdated' => $singularModelName,
             ...($this->hasTrashed ? [
                 'Trashed' => $pluralModelName,
                 'Restored' => $singularModelName,
@@ -285,6 +287,8 @@ class CallmeafPackageService
                 'Show',
                 'Update',
                 'Destroy',
+                'StatusUpdate',
+                'TypeUpdate',
                 ...($this->hasTrashed ? [
                     'Trashed',
                     'Restore',
@@ -299,6 +303,8 @@ class CallmeafPackageService
                 'Edit',
                 'Update',
                 'Destroy',
+                'StatusUpdate',
+                'TypeUpdate',
                 ...($this->hasTrashed ? [
                     'Trashed',
                     'Restore',
@@ -311,6 +317,8 @@ class CallmeafPackageService
                 'Show',
                 'Update',
                 'Destroy',
+                'StatusUpdate',
+                'TypeUpdate',
                 ...($this->hasTrashed ? [
                     'Trashed',
                     'Restore',
