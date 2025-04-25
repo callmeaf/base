@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
@@ -79,13 +80,13 @@ trait CoreRepoMethods
         return app($this->model)->getKeyName();
     }
 
-    public function toResource(BaseModel|BaseAuthModel $model)
+    public function toResource(BaseModel|BaseAuthModel|MissingValue $model)
     {
         return \Base::toResource(resource: $this->config['resources'][requestType()]['resource'], model: $model);
     }
 
 
-    public function toResourceCollection(Collection|LengthAwarePaginator|LazyCollection $collection)
+    public function toResourceCollection(Collection|LengthAwarePaginator|LazyCollection|MissingValue $collection)
     {
         return \Base::toResourceCollection(resourceCollection: $this->config['resources'][requestType()]['resource_collection'], collection: $collection);
     }
