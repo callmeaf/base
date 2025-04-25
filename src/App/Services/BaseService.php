@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
@@ -121,12 +122,12 @@ class BaseService
         return $this->adminConfig(key: 'append_version_to_prefix');
     }
 
-    public function toResource(string $resource, BaseModel|BaseAuthModel $model): JsonResource
+    public function toResource(string $resource, BaseModel|BaseAuthModel|MissingValue $model): JsonResource
     {
         return new $resource($model);
     }
 
-    public function toResourceCollection(string $resourceCollection, Collection|LengthAwarePaginator|LazyCollection $collection): ResourceCollection
+    public function toResourceCollection(string $resourceCollection, Collection|LengthAwarePaginator|LazyCollection|MissingValue $collection): ResourceCollection
     {
         return new $resourceCollection($collection);
     }
