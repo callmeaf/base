@@ -224,8 +224,8 @@ class CallmeafPackageService
         $version = str($this->version)->ucfirst()->toString();
         $modelName = $this->packageName;
 
-        $singularModelName = str($modelName)->lower()->singular();
-        $pluralModelName = str($modelName)->lower()->plural();
+        $singularModelName = str($modelName)->camel()->singular();
+        $pluralModelName = str($modelName)->camel()->plural();
         $lifeCycles = [
             'Indexed' => $pluralModelName,
             'Created' => $singularModelName,
