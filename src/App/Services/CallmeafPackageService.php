@@ -122,10 +122,10 @@ class CallmeafPackageService
 
         $modelName = $this->packageName;
         $config = str($this->packageName)->kebab()->lower()->toString();
-
+        $table = str($this->packageName)->snake()->lower()->toString();
         $result = $this->mkfile(path: $this->packageDir(
             append: "src/App/Models/$modelName.php"),
-            contents: str_replace(['{{ $model }}', '{{ $config }}'], [$modelName, $config], $this->stub(key: $this->isPivot ? 'model.pivot' : 'model'))
+            contents: str_replace(['{{ $model }}', '{{ $config }}','{{ $table }}'], [$modelName, $config,$table], $this->stub(key: $this->isPivot ? 'model.pivot' : 'model'))
         );
         if (! $result) {
             $this->pushError(message: "Failed to {$this->errorType} model file {$modelName}");

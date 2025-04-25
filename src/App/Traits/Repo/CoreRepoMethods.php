@@ -79,21 +79,13 @@ trait CoreRepoMethods
         return app($this->model)->getKeyName();
     }
 
-    /**
-     * @param BaseModel|BaseAuthModel $model
-     * @return JsonResource
-     */
-    protected function toResource(BaseModel|BaseAuthModel $model)
+    public function toResource(BaseModel|BaseAuthModel $model)
     {
         return \Base::toResource(resource: $this->config['resources'][requestType()]['resource'], model: $model);
     }
 
 
-    /**
-     * @param Collection|LengthAwarePaginator|LazyCollection $collection
-     * @return ResourceCollection
-     */
-    protected function toResourceCollection(Collection|LengthAwarePaginator|LazyCollection $collection)
+    public function toResourceCollection(Collection|LengthAwarePaginator|LazyCollection $collection)
     {
         return \Base::toResourceCollection(resourceCollection: $this->config['resources'][requestType()]['resource_collection'], collection: $collection);
     }
