@@ -138,7 +138,7 @@ class BaseService
 
     public function getConfigFromPackageName(string $packageName): array
     {
-        $packageName = str($packageName)->snake('-')->toString();
+        $packageName = str($packageName)->camel()->kebab()->toString();
         return config("callmeaf-{$packageName}-" . requestVersion()) ?? [];
     }
 
@@ -207,7 +207,7 @@ class BaseService
             $data = [];
             foreach ($enumsConfig as $packageName => $enums) {
                 $item = [];
-                $packageNameSnakeCase = str($packageName)->snake()->toString();
+                $packageNameSnakeCase = str($packageName)->camel()->camel()->snake()->toString();
 
                 foreach ($enums as $key => $enum) {
                     foreach ($enum::cases() as $case) {
@@ -232,7 +232,7 @@ class BaseService
             return '';
         }
 
-        $package = str($package)->snake('-')->toString();
+        $package = str($package)->camel()->kebab()->toString();
 
         return $this->enumsLang(package: $package)[get_class($case)][$case->name] ?? '';
     }
@@ -328,7 +328,7 @@ class BaseService
         foreach ($paths as $path) {
             if($files->isDirectory($path)) {
                 foreach ($files->directories($path) as $directory) {
-                    $packageName = str($directory)->afterLast('\\')->snake('-')->toString();
+                    $packageName = str($directory)->afterLast('\\')->camel()->kebab()->toString();
                     $allConfig[$packageName] = $this->getConfigFromPackageName(packageName: $packageName);
                 }
             }

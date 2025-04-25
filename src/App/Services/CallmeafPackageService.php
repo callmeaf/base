@@ -24,13 +24,13 @@ class CallmeafPackageService
 
     public function packageDir(string $append = ''): string
     {
-        $package = str($this->packageName)->snake()->toString();
+        $package = str($this->packageName)->camel()->camel()->snake()->toString();
         return packagePath($package, $append);
     }
 
     public function versionExists(): bool
     {
-        $configName = str($this->packageName)->snake(delimiter: '-')->toString();
+        $configName = str($this->packageName)->camel()->kebab()->toString();
 
         return $this->checkFileExists(path: $this->packageDir(
             append: "config/callmeaf-{$configName}-{$this->version}.php"
@@ -91,10 +91,10 @@ class CallmeafPackageService
             return $this;
         }
 
-        $configName = str($this->packageName)->snake(delimiter: '-')->toString();
-        $route = str($this->packageName)->plural()->snake()->toString();
+        $configName = str($this->packageName)->kebab()->toString();
+        $route = str($this->packageName)->plural()->camel()->snake()->toString();
         $version = str($this->version)->ucfirst()->toString();
-        $controller = str($this->packageName)->singular()->snake()->lower()->toString();
+        $controller = str($this->packageName)->singular()->camel()->snake()->lower()->toString();
         $studlyModel = str($this->packageName)->plural()->studly()->toString();
         $result = $this->mkfile(path: $this->packageDir(
             append: "config/callmeaf-{$configName}-{$this->version}.php"),
@@ -121,7 +121,7 @@ class CallmeafPackageService
         }
 
         $modelName = $this->packageName;
-        $config = str($this->packageName)->snake(delimiter: '-')->lower()->toString();
+        $config = str($this->packageName)->kebab()->lower()->toString();
 
         $result = $this->mkfile(path: $this->packageDir(
             append: "src/App/Models/$modelName.php"),
@@ -393,8 +393,8 @@ class CallmeafPackageService
         $this->ensurePackageMade();
 
         $modelName = $this->packageName;
-        $routeKeyName = str($modelName)->singular()->snake('_')->lower()->toString();
-        $controller = str($modelName)->singular()->snake()->lower()->toString();
+        $routeKeyName = str($modelName)->singular()->snake()->lower()->toString();
+        $controller = str($modelName)->singular()->camel()->snake()->lower()->toString();
 
         foreach ($this->guards as $guard) {
             $result = $this->mkdir(path: $this->packageDir(append: "routes/{$guard}"), recursive: true);
@@ -451,9 +451,9 @@ class CallmeafPackageService
         }
 
         if($this->isPivot) {
-            $tableName = str($this->packageName)->snake()->singular()->lower()->toString();
+            $tableName = str($this->packageName)->camel()->snake()->singular()->lower()->toString();
         } else {
-            $tableName = str($this->packageName)->snake()->plural()->lower()->toString();
+            $tableName = str($this->packageName)->camel()->snake()->plural()->lower()->toString();
         }
 
         foreach ($this->files->files($this->packageDir(append: "database/migrations")) as $file) {
@@ -489,7 +489,7 @@ class CallmeafPackageService
         ];
 
         $modelName = $this->packageName;
-        $table = str($this->packageName)->singular()->snake()->lower()->toString();
+        $table = str($this->packageName)->singular()->camel()->snake()->lower()->toString();
         foreach ($enumsStub as $enumStub) {
             $enumName = $modelName . str($enumStub)->headline()->toString();
             $result = $this->mkfile(path: $this->packageDir(
@@ -584,7 +584,7 @@ class CallmeafPackageService
         $this->ensurePackageMade();
 
         $modelName = $this->packageName;
-        $serviceKey = str($modelName)->snake('-')->lower()->toString();
+        $serviceKey = str($modelName)->camel()->kebab()->lower()->toString();
 
         $result = $this->mkdir(path: $this->packageDir(append: 'src'));
         if (! $result) {
@@ -608,7 +608,7 @@ class CallmeafPackageService
         $this->ensurePackageMade();
 
         $modelName = $this->packageName;
-        $package = str($modelName)->snake('-')->lower()->toString();
+        $package = str($modelName)->camel()->kebab()->lower()->toString();
         $desc = str($modelName)->headline()->plural()->toString();
 
         $result = $this->mkfile(path: $this->packageDir(
@@ -673,7 +673,7 @@ class CallmeafPackageService
         $composerJson = $this->files->get($composerPath);
         $composerJson = json_decode($composerJson,true);
         $packageName = str($this->packageName)->studly()->toString();
-        $packageDir = str($this->packageName)->snake()->lower()->toString();
+        $packageDir = str($this->packageName)->camel()->snake()->lower()->toString();
 
         $psr4 = $composerJson['autoload']['psr-4'];
         $psr4Key = "Callmeaf\\$packageName\\";
@@ -767,7 +767,7 @@ class CallmeafPackageService
 
     private function canRemoveFullDirPackage(): bool
     {
-        $snakeLowerModelName = str($this->packageName)->snake()->lower()->toString();
+        $snakeLowerModelName = str($this->packageName)->camel()->snake()->lower()->toString();
         $allExistsVersionCount = count(allExistsVersion(package: $snakeLowerModelName));
 
         return $allExistsVersionCount === 0;
@@ -778,7 +778,7 @@ class CallmeafPackageService
         if($this->remove) {
             return $this->canRemoveFullDirPackage();
         }
-        $snakeLowerModelName = str($this->packageName)->snake()->lower()->toString();
+        $snakeLowerModelName = str($this->packageName)->camel()->snake()->lower()->toString();
         $allExistsVersionCount = count(allExistsVersion(package: $snakeLowerModelName));
 
         return $allExistsVersionCount === 1;
