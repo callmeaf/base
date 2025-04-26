@@ -13,15 +13,15 @@ use Callmeaf\Base\Contracts\ServiceProvider\HasMiddleware;
 use Callmeaf\Base\Contracts\ServiceProvider\HasMigration;
 use Callmeaf\Base\Contracts\ServiceProvider\HasRepo;
 use Callmeaf\Base\Contracts\ServiceProvider\HasRoute;
+use Callmeaf\Base\Contracts\ServiceProvider\HasSeeder;
 use Callmeaf\Base\Contracts\ServiceProvider\HasView;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Application;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 
 abstract class CallmeafServiceProvider extends ServiceProvider
 {
@@ -56,6 +56,7 @@ abstract class CallmeafServiceProvider extends ServiceProvider
             $this->registerMigration();
             $this->registerMiddleware();
             $this->registerView();
+            $this->registerSeeder();
         }
     }
 
@@ -253,6 +254,18 @@ abstract class CallmeafServiceProvider extends ServiceProvider
             $this->publishes([
                 $viewDir => resource_path("views/vendor/$viewGroup")
             ]);
+        }
+    }
+
+    private function registerSeeder(): void
+    {
+        if($this instanceof HasSeeder) {
+            $seeders = $this->seeders();
+            $this->app->afterResolving(DatabaseSeeder::class,function($databaseSeeder) use ($seeders) {
+                foreach ($seeders as $seeder) {
+                    $databaseSeeder->call($seeder);
+                }
+            });
         }
     }
 

@@ -7,22 +7,16 @@ use Callmeaf\Base\App\Enums\ExportType;
 use Callmeaf\Base\App\Enums\ImportType;
 use Callmeaf\Base\App\Exceptions\ExportClassDoesNotExistsException;
 use Callmeaf\Base\App\Exceptions\ImportClassDoesNotExistsException;
-use Callmeaf\Base\App\Models\BaseAuthModel;
-use Callmeaf\Base\App\Models\BaseModel;
+use Callmeaf\Base\App\Models\Contracts\BaseConfigurable;
 use Callmeaf\Base\App\Repo\Contracts\CoreRepoInterface;
 use Callmeaf\Base\App\Services\Importer;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Resources\MissingValue;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\LazyCollection;
 use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 trait CoreRepoMethods
 {
@@ -80,7 +74,7 @@ trait CoreRepoMethods
         return app($this->model)->getKeyName();
     }
 
-    public function toResource(BaseModel|BaseAuthModel|MissingValue $model)
+    public function toResource(BaseConfigurable|MissingValue $model)
     {
         return \Base::toResource(resource: $this->config['resources'][requestType()]['resource'], model: $model);
     }

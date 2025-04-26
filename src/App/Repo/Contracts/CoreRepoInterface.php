@@ -4,8 +4,7 @@ namespace Callmeaf\Base\App\Repo\Contracts;
 
 use Callmeaf\Base\App\Enums\ExportType;
 use Callmeaf\Base\App\Enums\ImportType;
-use Callmeaf\Base\App\Models\BaseAuthModel;
-use Callmeaf\Base\App\Models\BaseModel;
+use Callmeaf\Base\App\Models\Contracts\BaseConfigurable;
 use Callmeaf\Base\App\Services\Importer;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,10 +12,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Resources\MissingValue;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\LazyCollection;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * @template TModel
@@ -69,10 +66,10 @@ interface CoreRepoInterface
     public function import(ImportType $type, $file): Importer;
 
     /**
-     * @param BaseModel|BaseAuthModel|MissingValue $model
+     * @param MissingValue|BaseConfigurable $model
      * @return TResource
      */
-    public function toResource(BaseModel|BaseAuthModel|MissingValue $model);
+    public function toResource(MissingValue|BaseConfigurable $model);
 
     /**
      * @param Collection|LengthAwarePaginator|LazyCollection|MissingValue $collection

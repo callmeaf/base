@@ -3,14 +3,11 @@
 namespace Callmeaf\Base\App\Services;
 
 
-use App\Models\User;
 use Callmeaf\Base\App\Constants\BaseConstant;
-use Callmeaf\Base\App\Enums\ExportType;
 use Callmeaf\Base\App\Enums\ImportType;
 use Callmeaf\Base\App\Enums\RandomType;
 use Callmeaf\Base\App\Enums\RequestType;
-use Callmeaf\Base\App\Models\BaseAuthModel;
-use Callmeaf\Base\App\Models\BaseModel;
+use Callmeaf\Base\App\Models\Contracts\BaseConfigurable;
 use Callmeaf\Base\App\Repo\Contracts\CoreRepoInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Filesystem\Filesystem;
@@ -20,7 +17,6 @@ use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
-use Maatwebsite\Excel\Excel;
 
 class BaseService
 {
@@ -122,7 +118,7 @@ class BaseService
         return $this->adminConfig(key: 'append_version_to_prefix');
     }
 
-    public function toResource(string $resource, BaseModel|BaseAuthModel|MissingValue $model): JsonResource
+    public function toResource(string $resource, BaseConfigurable|MissingValue $model): JsonResource
     {
         return new $resource($model);
     }
