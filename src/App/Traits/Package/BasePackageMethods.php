@@ -2,6 +2,8 @@
 
 namespace Callmeaf\Base\App\Traits\Package;
 
+use Illuminate\Support\Str;
+
 trait BasePackageMethods
 {
     public function basePackageDir(string $append = ''): string
@@ -47,9 +49,10 @@ trait BasePackageMethods
 
     private function baseConfig(): void
     {
+        $restrictRouteMiddlewareKey = Str::uuid();
         $result = $this->mkfile(path: $this->basePackageDir(
             append: "config/callmeaf-base-{$this->version}.php"),
-            contents: str_replace(['{{ $version }}'], [$this->version], $this->stub(key: 'config.base'))
+            contents: str_replace(['{{ $version }}','{{ $restrictRouteMiddlewareKey }}'], [$this->version,$restrictRouteMiddlewareKey], $this->stub(key: 'config.base'))
         );
         if (! $result) {
             $this->pushError(message: "Failed to {$this->errorType} base config file {$this->version}");
