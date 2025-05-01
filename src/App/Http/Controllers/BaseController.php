@@ -22,6 +22,8 @@ abstract class BaseController extends Controller
 
     public function enums(Request $request)
     {
+        logger('need to revalidate');
+        logger(needToRevalidate());
         if (! needToRevalidate()) {
             return response()->json(null, Response::HTTP_NOT_MODIFIED);
         }
