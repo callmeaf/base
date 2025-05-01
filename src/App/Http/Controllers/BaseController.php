@@ -22,8 +22,6 @@ abstract class BaseController extends Controller
 
     public function enums(Request $request)
     {
-        logger('need to revalidate');
-        logger(needToRevalidate());
         if (! needToRevalidate()) {
             return response()->json(null, Response::HTTP_NOT_MODIFIED);
         }
@@ -32,7 +30,8 @@ abstract class BaseController extends Controller
 
     public function revalidate()
     {
-        $cookie = cookie('x_revalidate', \Base::revalidate(), 60, '/', 'localhost', false, false, false, 'lax');
+        $isProduction = app()->isProduction();
+        $cookie = cookie('x_revalidate', \Base::revalidate(), 60, '/', getCookieDomainFromAppUrl(), $isProduction, $isProduction, false, 'lax');
 
         return response()->json()->cookie($cookie);
     }

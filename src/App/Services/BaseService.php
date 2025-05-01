@@ -214,8 +214,6 @@ class BaseService
                 $data[$packageNameSnakeCase] = $item;
             }
 
-            logger('final data');
-            logger(json_encode($package ? $data[$package] : $data));
             return $package ? $data[$package] : $data;
         });
     }

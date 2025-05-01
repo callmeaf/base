@@ -147,3 +147,27 @@ if (! function_exists('needToRevalidate')) {
         return strval((baseConfig()[\requestType($request)]['revalidate'] ?? '')) !== strval($request->cookie('x_revalidate'));
     }
 }
+
+if( !function_exists('getCookieDomainFromAppUrl')) {
+    function getCookieDomainFromAppUrl(): string
+    {
+        $appUrl = config('app.url'); // مثلا http://tb.alikhoshkar.ir
+        $host = parse_url($appUrl, PHP_URL_HOST); // tb.alikhoshkar.ir
+
+        // اگر لوکال باشه یا IP باشه، نذار دامنه‌ست بشه
+        if ($host === 'localhost' || filter_var($host, FILTER_VALIDATE_IP)) {
+            return 'localhost';
+        }
+
+        // دامنه اصلی رو از طریق explode گرفتن
+        $parts = explode('.', $host);
+
+        if (count($parts) >= 2) {
+            // برگردون چیزی مثل: .alikhoshkar.ir
+            return '.' . $parts[count($parts) - 2] . '.' . $parts[count($parts) - 1];
+        }
+
+        // fallback
+        return $host;
+    }
+}
