@@ -157,7 +157,7 @@ class BaseService
             $callerFile = debug_backtrace(options: DEBUG_BACKTRACE_IGNORE_ARGS, limit: 2)[1]['file'];
             $callerDir = str(dirname($callerFile));
 
-            $requestType = RequestType::tryFrom($callerDir->afterLast('\\')->toString())?->value;
+            $requestType = RequestType::tryFrom($callerDir->afterLast(DIRECTORY_SEPARATOR)->toString())?->value;
         }
 
         $controller = $config['controllers'][$requestType];
@@ -325,7 +325,7 @@ class BaseService
         foreach ($paths as $path) {
             if($files->isDirectory($path)) {
                 foreach ($files->directories($path) as $directory) {
-                    $packageName = str($directory)->afterLast('\\')->camel()->kebab()->toString();
+                    $packageName = str($directory)->afterLast(DIRECTORY_SEPARATOR)->camel()->kebab()->toString();
                     $allConfig[$packageName] = $this->getConfigFromPackageName(packageName: $packageName);
                 }
             }
