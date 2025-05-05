@@ -31,7 +31,7 @@ abstract class BaseController extends Controller
     public function revalidate()
     {
         $isProduction = app()->isProduction();
-        $cookie = cookie('x_revalidate', \Base::revalidate(), 60, '/', getCookieDomainFromAppUrl(), $isProduction, $isProduction, false, 'lax');
+        $cookie = cookie('x_revalidate', \Base::revalidate(), 60, '/', getCookieDomainFromAppUrl(), $isProduction, true, false, 'lax');
 
         return response()->json()->cookie($cookie);
     }
