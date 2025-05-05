@@ -69,6 +69,12 @@ trait CoreRepoMethods
         return $this->findBy(column: $this->modelKeyName(), value: $value);
     }
 
+    public function first()
+    {
+        $model = $this->getQuery()->firstOrFail();
+        return $this->toResource(model: $model);
+    }
+
     protected function modelKeyName(): string
     {
         return app($this->model)->getKeyName();
@@ -105,8 +111,7 @@ trait CoreRepoMethods
         }
 
         $eventClass = array_key_first(array: $event);
-
-        event(new $eventClass(...$args));
+        $eventClass::dispatch(...$args);
     }
 
     public function builder(callable $closure): CoreRepoInterface
@@ -137,6 +142,13 @@ trait CoreRepoMethods
     public function latest(string $column = 'created_at'): self
     {
         $this->orderBy($column, 'desc');
+
+        return $this;
+    }
+
+    public function oldest(string $column = 'created_at'): self
+    {
+        $this->orderBy($column, 'asc');
 
         return $this;
     }

@@ -16,6 +16,7 @@ use Callmeaf\Base\Contracts\ServiceProvider\HasRoute;
 use Callmeaf\Base\Contracts\ServiceProvider\HasSeeder;
 use Callmeaf\Base\Contracts\ServiceProvider\HasView;
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Application;
 use Illuminate\Routing\Router;
@@ -203,11 +204,9 @@ abstract class CallmeafServiceProvider extends ServiceProvider
             $allEvents = $this->serviceConfig(key: 'events');
             foreach ($allEvents as $events) {
                 foreach ($events as $event => $listeners) {
-                    Event::listen(events: $event, listener: function ($event) use ($listeners) {
-                        foreach ($listeners as $listener) {
-                            app($listener)->handle($event);
-                        }
-                    });
+                    foreach ($listeners as $listener) {
+                        Event::listen($event,$listener);
+                    }
                 }
             }
         }

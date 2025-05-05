@@ -25,7 +25,7 @@ trait HasDate
     public function deletedAtText(DateTimeFormat $format = DateTimeFormat::DATE)
     {
         return match (app()->currentLocale()) {
-            'fa' => verta($this->deleted_at)->format($format->value),
+            'fa' => empty($this->deleted_at) ? null : verta($this->deleted_at)->format($format->value),
             default => $this->deleted_at?->format($format->value),
         };
     }

@@ -50,6 +50,11 @@ interface CoreRepoInterface
      */
     public function findById(mixed $value);
 
+    /**
+     * @return TResource
+     */
+    public function first();
+
     public function enums(): JsonResponse;
     /**
      * @param callable(Builder): void $closure
@@ -60,6 +65,7 @@ interface CoreRepoInterface
     public function orderBy(string $column, $direction = 'asc'): self;
 
     public function latest(string $column = 'created_at'): self;
+    public function oldest(string $column = 'created_at'): self;
 
     public function export(ExportType $type);
 
