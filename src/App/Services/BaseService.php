@@ -118,8 +118,11 @@ class BaseService
         return $this->adminConfig(key: 'append_version_to_prefix');
     }
 
-    public function toResource(string $resource, BaseConfigurable|MissingValue $model): JsonResource
+    public function toResource(string $resource, BaseConfigurable|MissingValue|null $model): null|JsonResource
     {
+        if(is_null($model)) {
+            return null;
+        }
         return new $resource($model);
     }
 

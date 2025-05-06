@@ -80,7 +80,7 @@ trait CoreRepoMethods
         return app($this->model)->getKeyName();
     }
 
-    public function toResource(BaseConfigurable|MissingValue $model)
+    public function toResource(BaseConfigurable|MissingValue|null $model)
     {
         return \Base::toResource(resource: $this->config['resources'][requestType()]['resource'], model: $model);
     }

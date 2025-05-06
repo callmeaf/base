@@ -72,10 +72,10 @@ interface CoreRepoInterface
     public function import(ImportType $type, $file): Importer;
 
     /**
-     * @param MissingValue|BaseConfigurable $model
-     * @return TResource
+     * @param MissingValue|BaseConfigurable|null $model
+     * @return TResource|null
      */
-    public function toResource(MissingValue|BaseConfigurable $model);
+    public function toResource(MissingValue|BaseConfigurable|null $model);
 
     /**
      * @param Collection|LengthAwarePaginator|LazyCollection|MissingValue $collection
