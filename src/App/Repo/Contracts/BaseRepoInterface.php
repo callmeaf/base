@@ -20,6 +20,12 @@ interface BaseRepoInterface extends CoreRepoInterface
     public function create(array $data);
 
     /**
+     * @param array $data
+     * @return TResource
+     */
+    public function createQuietly(array $data);
+
+    /**
      * @return TResourceCollection
      */
     public function all();
