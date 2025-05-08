@@ -114,7 +114,9 @@ abstract class CallmeafServiceProvider extends ServiceProvider
                 $this->app->singleton(abstract: $service, concrete: function (\Illuminate\Contracts\Foundation\Application $app) use ($service) {
                     return new $service();
                 });
-                class_alias(class: $facade, alias: $alias);
+                if(! class_exists($alias)) {
+                    class_alias(class: $facade, alias: $alias);
+                }
             }
         }
     }
