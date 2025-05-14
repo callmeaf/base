@@ -9,24 +9,24 @@ trait HasDate
     public function createdAtText(DateTimeFormat $format = DateTimeFormat::DATE)
     {
         return match (app()->currentLocale()) {
-            'fa' => verta($this->created_at)->format($format->value),
-            default => $this->created_at?->format($format->value),
+            'fa' => $this->created_at ? verta($this->created_at)->format($format->value) : null,
+            default => $this->created_at ? $this->created_at->format($format->value) : null,
         };
     }
 
     public function updatedAtText(DateTimeFormat $format = DateTimeFormat::DATE)
     {
         return match (app()->currentLocale()) {
-            'fa' => verta($this->updated_at)->format($format->value),
-            default => $this->updated_at?->format($format->value),
+            'fa' => $this->updated_at ?  verta($this->updated_at)->format($format->value) : null,
+            default => $this->updated_at ? $this->updated_at?->format($format->value) : null,
         };
     }
 
     public function deletedAtText(DateTimeFormat $format = DateTimeFormat::DATE)
     {
         return match (app()->currentLocale()) {
-            'fa' => empty($this->deleted_at) ? null : verta($this->deleted_at)->format($format->value),
-            default => $this->deleted_at?->format($format->value),
+            'fa' => $this->deleted_at ? verta($this->deleted_at)->format($format->value) : null,
+            default =>  $this->deleted_at ? $this->deleted_at->format($format->value) : null,
         };
     }
 }
