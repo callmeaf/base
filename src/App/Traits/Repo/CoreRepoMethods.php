@@ -2,6 +2,7 @@
 
 namespace Callmeaf\Base\App\Traits\Repo;
 
+use App\Models\User;
 use Callmeaf\Base\App\Enums\EventNameSuffix;
 use Callmeaf\Base\App\Enums\ExportType;
 use Callmeaf\Base\App\Enums\ImportType;
@@ -77,7 +78,7 @@ trait CoreRepoMethods
 
     protected function modelKeyName(): string
     {
-        return app($this->model)->getKeyName();
+        return app($this->model)->getRouteKeyName();
     }
 
     public function toResource(BaseConfigurable|MissingValue|null $model)

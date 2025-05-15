@@ -2,7 +2,11 @@
 
 namespace Callmeaf\Base\App\Traits\Repo;
 
+use Callmeaf\Base\App\Models\Contracts\BaseConfigurable;
+use Callmeaf\Base\App\Models\Contracts\HasMedia;
 use Callmeaf\Base\App\Traits\Model\HasSearch;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 trait BaseRepoMethods
 {
@@ -122,5 +126,50 @@ trait BaseRepoMethods
     public function forceDeleteQuietly(mixed $id): int
     {
         return $this->trashed()->getQuery()->where(column: $this->modelKeyName(), operator: $id)->forceDelete();
+    }
+
+    public function addMedia(mixed $id,UploadedFile $file,?string $collectionName = null,?string $diskName = null,bool $removeOldMedia = true)
+    {
+        $model = $id instanceof JsonResource ? $id : $this->findById($id);
+        if(! ( $model->resource instanceof HasMedia )) {
+            throw new \Exception("Model must implements HasMedia.php interface for addMedia");
+        }
+        /**
+         * @var HasMedia $model
+         */
+        $collectionName ??= $model->mediaCollectionName() ?? 'default';
+        $diskName ??= $model->mediaDiskName() ?? '';
+
+        if($removeOldMedia) {
+            $model->clearMediaCollection($collectionName);
+        }
+        return $model->addMedia(file: $file)->toMediaCollection(collectionName: $collectionName,diskName: $diskName);
+    }
+
+    public function addMultiMedia(mixed $id,array $files,?string $collectionName = null,?string $diskName = null,bool $removeOldMedia = false)
+    {
+        $model = $id instanceof JsonResource ? $id : $this->findById($id);
+        if(! ($model->resource instanceof HasMedia)) {
+            throw new \Exception("Model must implements HasMedia.php interface for addMultiMedia");
+        }
+        /**
+         * @var HasMedia $model
+         */
+        $collectionName ??= $model->mediaCollectionName() ?? 'default';
+        $diskName ??= $model->mediaDiskName() ?? '';
+
+        $media = collect();
+
+        if($removeOldMedia) {
+            $model->clearMediaCollection($collectionName);
+        }
+
+        foreach ($files as $file) {
+            $media->push(
+                $model->addMedia($file)->toMediaCollection(collectionName: $collectionName,diskName: $diskName)
+            );
+        }
+
+        return $media;
     }
 }

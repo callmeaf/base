@@ -2,8 +2,10 @@
 
 namespace Callmeaf\Base\App\Repo\Contracts;
 
+use Callmeaf\Media\App\Models\Media;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @template TModel
@@ -90,4 +92,24 @@ interface BaseRepoInterface extends CoreRepoInterface
      * @return int
      */
     public function forceDeleteQuietly(mixed $id): int;
+
+    /**
+     * @param mixed $id
+     * @param UploadedFile $file
+     * @param string|null $collectionName
+     * @param string|null $diskName
+     * @param bool $removeOldMedia
+     * @return Media
+     */
+    public function addMedia(mixed $id,UploadedFile $file,?string $collectionName = 'default',?string $diskName = '',bool $removeOldMedia = true);
+
+    /**
+     * @param mixed $id
+     * @param array $files
+     * @param string|null $collectionName
+     * @param string|null $diskName
+     * @param bool $removeOldMedia
+     * @return Media[]
+     */
+    public function addMultiMedia(mixed $id,array $files,?string $collectionName = 'default',?string $diskName = '',bool $removeOldMedia = false);
 }
