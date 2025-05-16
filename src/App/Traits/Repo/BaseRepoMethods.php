@@ -2,6 +2,7 @@
 
 namespace Callmeaf\Base\App\Traits\Repo;
 
+use Callmeaf\Base\App\Enums\RandomType;
 use Callmeaf\Base\App\Models\Contracts\BaseConfigurable;
 use Callmeaf\Base\App\Models\Contracts\HasMedia;
 use Callmeaf\Base\App\Traits\Model\HasSearch;
@@ -143,7 +144,9 @@ trait BaseRepoMethods
         if($removeOldMedia) {
             $model->clearMediaCollection($collectionName);
         }
-        return $model->addMedia(file: $file)->toMediaCollection(collectionName: $collectionName,diskName: $diskName);
+        $hashedFileName = \Base::random(length: 10) . '.' . $file->getClientOriginalExtension();
+        $name = $file->getClientOriginalName();
+        return $model->addMedia(file: $file)->usingFileName($hashedFileName)->usingName($name)->toMediaCollection(collectionName: $collectionName,diskName: $diskName);
     }
 
     public function addMultiMedia(mixed $id,array $files,?string $collectionName = null,?string $diskName = null,bool $removeOldMedia = false)
@@ -165,8 +168,10 @@ trait BaseRepoMethods
         }
 
         foreach ($files as $file) {
+            $hashedFileName = \Base::random(length: 10) . '.' . $file->getClientOriginalExtension();
+            $name = $file->getClientOriginalName();
             $media->push(
-                $model->addMedia($file)->toMediaCollection(collectionName: $collectionName,diskName: $diskName)
+                $model->addMedia($file)->usingFileName($hashedFileName)->usingName($name)->toMediaCollection(collectionName: $collectionName,diskName: $diskName)
             );
         }
 
