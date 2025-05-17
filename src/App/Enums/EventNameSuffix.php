@@ -9,6 +9,8 @@ enum EventNameSuffix: string
     case Created = 'create';
     case Showed = 'findBy';
     case Updated = 'update';
+    case StatusUpdated = 'statusUpdate';
+    case TypeUpdated = 'typeUpdate';
     case Deleted = 'delete';
     case Restored = 'restore';
     case Trashed = 'trashed';

@@ -52,6 +52,19 @@ interface BaseRepoInterface extends CoreRepoInterface
 
     /**
      * @param mixed $id
+     * @param mixed $value
+     * @return TResource
+     */
+    public function statusUpdate(mixed $id, mixed $value);
+
+    /**
+     * @param mixed $id
+     * @param mixed $value
+     * @return TResource
+     */
+    public function typeUpdate(mixed $id, mixed $value);
+    /**
+     * @param mixed $id
      * @param array $data
      * @return int
      */

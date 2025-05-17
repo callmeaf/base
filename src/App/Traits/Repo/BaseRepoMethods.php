@@ -69,6 +69,14 @@ trait BaseRepoMethods
 
     public function update(mixed $id, array $data)
     {
+        if(count($data) === 1 && array_keys($data) === ['status']) {
+            return $this->statusUpdate(id: $id,value: $data['status']);
+        }
+
+        if(count($data) === 1 && array_keys($data) === ['type']) {
+            return $this->typeUpdate(id: $id,value: $data['type']);
+        }
+
         $model = $this->findById(value: $id);
         $model = tap($model->resource)->update($data);
 
@@ -80,6 +88,30 @@ trait BaseRepoMethods
     public function updateQuietly(mixed $id, array $data): int
     {
         return $this->getQuery()->where(column: $this->modelKeyName(), operator: $id)->update(values: $data);
+    }
+
+    public function statusUpdate(mixed $id,mixed $value)
+    {
+        $model = $this->findById(value: $id);
+        $model = tap($model->resource)->update([
+            'status' => $value,
+        ]);
+
+        $this->eventsCaller($model);
+
+        return $this->toResource(model: $model);
+    }
+
+    public function typeUpdate(mixed $id,mixed $value)
+    {
+        $model = $this->findById(value: $id);
+        $model = tap($model->resource)->update([
+            'type' => $value
+        ]);
+
+        $this->eventsCaller($model);
+
+        return $this->toResource(model: $model);
     }
 
     public function delete(mixed $id)

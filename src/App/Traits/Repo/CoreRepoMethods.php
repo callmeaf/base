@@ -103,7 +103,6 @@ trait CoreRepoMethods
         $events = $events[requestType()];
 
         $caller = debug_backtrace(limit: 2)[1]['function'];
-
         $eventNameSuffix = EventNameSuffix::from(value: $caller);
         $event = array_filter(array: $events, callback: fn($value, $key) => str_contains(haystack: $key, needle: $eventNameSuffix->name), mode: ARRAY_FILTER_USE_BOTH);
 
