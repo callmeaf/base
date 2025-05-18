@@ -33,8 +33,12 @@ return [
         ],
     ],
     'locales' => [
-        'fa',
-        'en'
+        'fa' => [
+            'dir' => 'rtl'
+        ],
+        'en' => [
+            'dir' => 'ltr'
+        ]
     ],
     'page_key' => 'page',
     'per_page_key' => 'per_page',

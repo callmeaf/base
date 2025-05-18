@@ -419,7 +419,7 @@ class CallmeafPackageService
     {
         $this->ensurePackageMade();
 
-        $locales = \Base::config(key: 'locales');
+        $locales = array_keys(\Base::config(key: 'locales'));
 
         foreach ($locales as $locale) {
             $result = $this->mkdir(path: $this->packageDir(append: "lang/$locale"), recursive: true);
@@ -501,7 +501,7 @@ class CallmeafPackageService
             }
         }
 
-        $locales = \Base::config(key: 'locales');
+        $locales = array_keys(\Base::config(key: 'locales'));
 
         foreach ($locales as $locale) {
             $result = $this->mkdir(path: $this->packageDir(append: "lang/$locale"), recursive: true);

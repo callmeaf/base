@@ -171,3 +171,4 @@ if( !function_exists('getCookieDomainFromAppUrl')) {
         return $host;
     }
 }
+

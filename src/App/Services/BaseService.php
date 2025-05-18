@@ -15,6 +15,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
 
@@ -335,5 +336,23 @@ class BaseService
         }
 
         return array_filter($allConfig);
+    }
+
+    public function currentLangConfig(): array
+    {
+        $currentLocale = App::currentLocale();
+        $langConfig = $this->config(key: 'locales')[App::currentLocale()] ?? null;
+
+        if(empty($langConfig)) {
+            $version = requestVersion();
+            throw new \Exception("$currentLocale has no config in callmeaf-base-$version.php");
+        }
+
+        return $langConfig;
+    }
+
+    public function currentLangDir(): string
+    {
+        return $this->currentLangConfig()['dir'];
     }
 }
