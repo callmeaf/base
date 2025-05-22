@@ -2,7 +2,7 @@
 
 namespace Callmeaf\Base\App\Traits\Repo;
 
-use Callmeaf\Base\App\Models\Contracts\HasMedia;
+use Callmeaf\Media\App\Models\Contracts\HasMedia;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -21,7 +21,11 @@ trait MediaMethods
         $diskName ??= $model->mediaDiskName() ?? '';
 
         if($removeOldMedia) {
-            $model->clearMediaCollection($collectionName);
+            if($model->keepDeletedMedia()) {
+                $model->clearMediaCollection($collectionName);
+            } else {
+                $model->forceClearMediaCollection($collectionName);
+            }
         }
         $hashedFileName = \Base::random(length: 10) . '.' . $file->getClientOriginalExtension();
         $name = $file->getClientOriginalName();
@@ -43,7 +47,11 @@ trait MediaMethods
         $media = collect();
 
         if($removeOldMedia) {
-            $model->clearMediaCollection($collectionName);
+            if($model->keepDeletedMedia()) {
+                $model->clearMediaCollection($collectionName);
+            } else {
+                $model->forceClearMediaCollection($collectionName);
+            }
         }
 
         foreach ($files as $file) {
