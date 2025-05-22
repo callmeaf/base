@@ -106,23 +106,4 @@ interface BaseRepoInterface extends CoreRepoInterface
      */
     public function forceDeleteQuietly(mixed $id): int;
 
-    /**
-     * @param mixed $id
-     * @param UploadedFile $file
-     * @param string|null $collectionName
-     * @param string|null $diskName
-     * @param bool $removeOldMedia
-     * @return Media
-     */
-    public function addMedia(mixed $id,UploadedFile $file,?string $collectionName = 'default',?string $diskName = '',bool $removeOldMedia = true);
-
-    /**
-     * @param mixed $id
-     * @param array $files
-     * @param string|null $collectionName
-     * @param string|null $diskName
-     * @param bool $removeOldMedia
-     * @return Media[]
-     */
-    public function addMultiMedia(mixed $id,array $files,?string $collectionName = 'default',?string $diskName = '',bool $removeOldMedia = false);
 }
