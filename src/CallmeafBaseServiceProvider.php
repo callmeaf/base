@@ -14,6 +14,7 @@ use Callmeaf\Base\Contracts\ServiceProvider\HasHelpers;
 use Callmeaf\Base\Contracts\ServiceProvider\HasLang;
 use Callmeaf\Base\Contracts\ServiceProvider\HasMiddleware;
 use Callmeaf\Base\Contracts\ServiceProvider\HasRoute;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;
 
 class CallmeafBaseServiceProvider extends CallmeafServiceProvider implements HasConfig, HasFacade, HasMiddleware, HasLang, HasCommand, HasHelpers, HasRoute
@@ -21,6 +22,13 @@ class CallmeafBaseServiceProvider extends CallmeafServiceProvider implements Has
     public function serviceKey(): string
     {
         return 'base';
+    }
+
+    public function boot(): void
+    {
+        parent::boot();
+
+        Relation::enforceMorphMap(\Base::relationMorphMap());
     }
 
     public function middlewares(Router $router): void
@@ -43,5 +51,16 @@ class CallmeafBaseServiceProvider extends CallmeafServiceProvider implements Has
         return [
             '/helpers.php'
         ];
+    }
+
+    private function relationMorphMap(): ?array
+    {
+        $relationMorphMapClass = $this->serviceConfig('relation_morph_map') ?? null;
+
+        if(is_null($relationMorphMapClass)) {
+            return null;
+        }
+
+        return (new $relationMorphMapClass)();
     }
 }

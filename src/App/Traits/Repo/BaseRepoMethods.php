@@ -3,6 +3,7 @@
 namespace Callmeaf\Base\App\Traits\Repo;
 
 use Callmeaf\Base\App\Traits\Model\HasSearch;
+use Illuminate\Database\Eloquent\Model;
 
 trait BaseRepoMethods
 {

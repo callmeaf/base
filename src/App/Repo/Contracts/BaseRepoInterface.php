@@ -3,6 +3,7 @@
 namespace Callmeaf\Base\App\Repo\Contracts;
 
 use Callmeaf\Media\App\Models\Media;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -105,5 +106,4 @@ interface BaseRepoInterface extends CoreRepoInterface
      * @return int
      */
     public function forceDeleteQuietly(mixed $id): int;
-
 }

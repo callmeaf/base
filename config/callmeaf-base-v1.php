@@ -49,4 +49,5 @@ return [
     'import_rate_limit_request' => 5, // per minute for send import request ( in throttle middleware )
     'trashed_key' => 'trashed', // set ?trashed=true in url for get trashed data
     'restrict_route_middleware_key' => env('RESTRICT_ROUTE_KEY','4f928efb-4773-487b-a04f-c148c29f36dc'), // use in RestrictRouteMiddleware for security some routes,
+    'relation_morph_map' => \Callmeaf\Base\App\Services\RelationMorphMap::class, // can use normal array key as alias value as repo or model ex: ['user' => UserRepo::class or User::class],
 ];

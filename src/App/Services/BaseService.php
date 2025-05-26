@@ -355,4 +355,36 @@ class BaseService
     {
         return $this->currentLangConfig()['dir'];
     }
+
+    public function relationMorphMap(): array
+    {
+        $relationMorphMapClass = $this->config('relation_morph_map');
+
+        if(empty($relationMorphMapClass)) {
+            return [];
+        }
+
+        if(is_array($relationMorphMapClass)) {
+            foreach ($relationMorphMapClass as $alias => $class) {
+                $model = app($class);
+                if($model instanceof CoreRepoInterface) {
+                    $model = $model->getModel()::class;
+                }
+                $relationMorphMapClass[$alias] = $model;
+            }
+            return $relationMorphMapClass;
+        }
+
+        return (new $relationMorphMapClass)();
+    }
+
+    public function relationMorphMapAlias(): array
+    {
+        return array_keys($this->relationMorphMap());
+    }
+
+    public function getMorphedModel(string $morphType): ?string
+    {
+        return $this->relationMorphMap()[$morphType] ?? null;
+    }
 }
