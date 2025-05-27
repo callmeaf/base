@@ -18,6 +18,11 @@ trait HasParent
         $query->whereNotNull('parent_id');
     }
 
+    public function scopeChildrenOf(Builder $query,string|int $parentId): void
+    {
+        $query->where('parent_id',$parentId);
+    }
+
     public function parent(): BelongsTo
     {
         return $this->belongsTo(self::class,'parent_id',$this->getRouteKeyName());
