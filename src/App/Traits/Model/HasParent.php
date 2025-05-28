@@ -32,4 +32,14 @@ trait HasParent
     {
         return $this->hasMany(self::class,'parent_id',$this->getRouteKeyName());
     }
+
+    public function isParent(): bool
+    {
+        return empty($this->parent_id);
+    }
+
+    public function isChildren(): bool
+    {
+        return ! $this->isParent();
+    }
 }
