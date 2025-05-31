@@ -23,7 +23,7 @@ trait CoreRepoMethods
 {
     public function getQuery(bool $fresh = false): Builder
     {
-        return $fresh ? $this->query->newQuery() : $this->query;
+        return $fresh ? $this->getModel()->newQuery() : $this->query;
     }
 
     public function freshQuery(): self
