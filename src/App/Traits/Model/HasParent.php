@@ -10,36 +10,41 @@ trait HasParent
 {
     public function scopeParent(Builder $query): void
     {
-        $query->whereNull('parent_id');
+        $query->whereNull($this->parentColumnName());
     }
 
     public function scopeChildren(Builder $query): void
     {
-        $query->whereNotNull('parent_id');
+        $query->whereNotNull($this->parentColumnName());
     }
 
     public function scopeChildrenOf(Builder $query,string|int $parentId): void
     {
-        $query->where('parent_id',$parentId);
+        $query->where($this->parentColumnName(),$parentId);
     }
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(self::class,'parent_id',$this->getRouteKeyName());
+        return $this->belongsTo(self::class,$this->parentColumnName(),$this->getRouteKeyName());
     }
 
     public function children(): HasMany
     {
-        return $this->hasMany(self::class,'parent_id',$this->getRouteKeyName());
+        return $this->hasMany(self::class,$this->parentColumnName(),$this->getRouteKeyName());
     }
 
     public function isParent(): bool
     {
-        return empty($this->parent_id);
+        return empty($this->{$this->parentColumnName()});
     }
 
     public function isChildren(): bool
     {
         return ! $this->isParent();
+    }
+
+    public function parentColumnName(): string
+    {
+        return 'parent_id';
     }
 }
