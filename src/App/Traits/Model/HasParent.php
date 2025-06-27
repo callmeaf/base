@@ -25,12 +25,12 @@ trait HasParent
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(self::class,$this->parentColumnName(),$this->getRouteKeyName());
+        return $this->belongsTo(self::class,$this->parentColumnName(),$this->getKeyName());
     }
 
     public function children(): HasMany
     {
-        return $this->hasMany(self::class,$this->parentColumnName(),$this->getRouteKeyName());
+        return $this->hasMany(self::class,$this->parentColumnName(),$this->getKeyName());
     }
 
     public function isParent(): bool
