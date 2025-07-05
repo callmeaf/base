@@ -22,4 +22,9 @@ trait BaseModelMethods
 
         return $primaryKey;
     }
+
+    public function relationMorphMapName(): string
+    {
+        return str(class_basename(static::class))->snake()->lower()->toString();
+    }
 }

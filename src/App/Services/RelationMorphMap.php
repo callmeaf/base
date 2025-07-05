@@ -11,15 +11,32 @@ class RelationMorphMap
 {
     public function __invoke(): array
     {
+        /**
+         * @var AuthRepoInterface $authRepo
+         */
         $authRepo = app(AuthRepoInterface::class);
+        $authModel = $authRepo->getModel();
+        /**
+         * @var UserRepoInterface $userRepo
+         */
         $userRepo = app(UserRepoInterface::class);
+        $userModel = $userRepo->getModel();
+        /**
+         * @var ProductCategoryRepoInterface $productCategoryRepo
+         */
         $productCategoryRepo = app(ProductCategoryRepoInterface::class);
+        $productCategoryModel = $productCategoryRepo->getModel();
+        /**
+         * @var ProductRepoInterface $productRepo
+         */
         $productRepo = app(ProductRepoInterface::class);
+        $productModel = $productRepo->getModel();
+
         return [
-            'auth' => $authRepo->getModel()::class,
-            'user' => $userRepo->getModel()::class,
-            'product_category' => $productCategoryRepo->getModel()::class,
-            'product' => $productRepo->getModel()::class,
+            $authModel->relationMorphMapName() => $authModel::class,
+            $userModel->relationMorphMapName() => $userModel::class,
+            $productCategoryModel->relationMorphMapName() => $productCategoryModel::class,
+            $productModel->relationMorphMapName() => $productModel::class,
         ];
     }
 }

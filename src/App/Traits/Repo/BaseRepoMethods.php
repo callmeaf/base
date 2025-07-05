@@ -37,6 +37,11 @@ trait BaseRepoMethods
         $request = request();
 
         $perPage ??= $request->query(\Base::config(key: 'per_page_key'));
+        $maxPerPage = \Base::config(key: 'max_per_page');
+        if(intval($perPage) > $maxPerPage) {
+            $perPage = $maxPerPage;
+        }
+
         $page ??= $request->query(\Base::config(key: 'page_key'));
 
         $collection = $this->getQuery()->paginate(perPage: $perPage, page: $page);

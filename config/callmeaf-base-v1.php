@@ -42,6 +42,7 @@ return [
     ],
     'page_key' => 'page',
     'per_page_key' => 'per_page',
+    'max_per_page' => 300,
     'search_value_format' => '%%%s%%',
     'export_chunk_size' => 200,
     'export_rate_limit_request' => 5, // per minute for send export request ( in throttle middleware )
