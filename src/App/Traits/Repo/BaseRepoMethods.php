@@ -18,7 +18,7 @@ trait BaseRepoMethods
         return $resource;
     }
 
-    public function createQuietly(array $data): int
+    public function createQuietly(array $data)
     {
         return $this->getQuery()->create(attributes: $data);
     }
